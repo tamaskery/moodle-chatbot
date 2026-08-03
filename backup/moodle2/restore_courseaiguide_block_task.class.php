@@ -35,6 +35,24 @@ class restore_courseaiguide_block_task extends restore_block_task {
         $this->add_step(new restore_courseaiguide_block_structure_step('courseaiguide_structure', 'courseaiguide.xml'));
     }
 
+    /**
+     * Define the file areas owned by this block.
+     *
+     * @return array
+     */
+    public function get_fileareas(): array {
+        return [];
+    }
+
+    /**
+     * Define encoded block configuration attributes that need link decoding.
+     *
+     * @return array
+     */
+    public function get_configdata_encoded_attributes(): array {
+        return [];
+    }
+
     /** Queue a fresh index; restored participant access remains disabled until success. */
     public function after_restore(): void {
         \block_courseaiguide\local\lifecycle::queue_index((int) $this->get_courseid());
