@@ -24,7 +24,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 /** Restore safe course configuration only. */
-class restore_courseaiguide_block_structure_step extends restore_block_structure_step {
+class restore_courseaiguide_block_structure_step extends restore_structure_step {
     /** @return array */
     protected function define_structure(): array {
         return [new restore_path_element('courseaiguide', '/block/courseaiguide')];
