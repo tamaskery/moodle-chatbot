@@ -1,0 +1,39 @@
+<?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Course AI Guide plugin.
+ *
+ * @package    block_courseaiguide
+ * @copyright  2026 Course AI Guide contributors
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+namespace block_courseaiguide\local\provider;
+
+defined('MOODLE_INTERNAL') || die();
+
+/**
+ * Replaceable chat provider contract.
+ */
+interface chat_provider_interface {
+    /**
+     * Complete a bounded chat request.
+     *
+     * @param chat_request $request
+     * @return chat_response
+     */
+    public function complete(chat_request $request): chat_response;
+}

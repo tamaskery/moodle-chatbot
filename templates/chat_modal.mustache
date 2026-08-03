@@ -1,0 +1,43 @@
+{{!
+    @template block_courseaiguide/chat_modal
+
+    Accessible chat form with separate authoritative facts, generated explanation, and sources.
+
+    Context variables required for this template:
+    * disclaimer Administrator-approved AI disclaimer.
+    * historyavailable Whether explicit participant opt-in may retain the turn.
+}}
+<div class="block-courseaiguide-chat" data-region="courseaiguide-chat">
+    <p class="alert alert-info" data-region="disclaimer">{{disclaimer}}</p>
+    <p id="courseaiguide-examples">{{#str}}examples, block_courseaiguide{{/str}}</p>
+    <form data-region="ask-form">
+        <div class="form-group">
+            <label for="courseaiguide-question">{{#str}}question, block_courseaiguide{{/str}}</label>
+            <textarea id="courseaiguide-question" class="form-control" name="question" rows="4" maxlength="2000"
+                aria-describedby="courseaiguide-examples" required></textarea>
+        </div>
+        {{#historyavailable}}
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="courseaiguide-save" data-region="save-history">
+                <label class="form-check-label" for="courseaiguide-save">
+                    {{#str}}savehistory, block_courseaiguide{{/str}}
+                </label>
+            </div>
+        {{/historyavailable}}
+        <button class="btn btn-primary" type="submit" data-action="ask">{{#str}}ask, block_courseaiguide{{/str}}</button>
+        <button class="btn btn-secondary" type="button" data-action="cancel">{{#str}}cancel, block_courseaiguide{{/str}}</button>
+    </form>
+    <div class="mt-3" role="status" aria-live="polite" aria-atomic="true" data-region="status"></div>
+    <section class="mt-3" data-region="facts" hidden>
+        <h4>{{#str}}authoritativefacts, block_courseaiguide{{/str}}</h4>
+        <ul data-region="fact-list"></ul>
+    </section>
+    <section class="mt-3" data-region="answer" hidden>
+        <h4>{{#str}}generatedexplanation, block_courseaiguide{{/str}}</h4>
+        <p data-region="answer-text"></p>
+    </section>
+    <section class="mt-3" data-region="sources" hidden>
+        <h4>{{#str}}sources, block_courseaiguide{{/str}}</h4>
+        <ul data-region="source-list"></ul>
+    </section>
+</div>

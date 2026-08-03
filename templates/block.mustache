@@ -1,0 +1,39 @@
+{{!
+    @template block_courseaiguide/block
+
+    Course-only block entry point with safe manager and participant actions.
+
+    Context variables required for this template:
+    * courseid Course identifier.
+    * canask Whether the participant entry point is available.
+    * canmanage Whether manager controls are visible.
+    * status Localised index status.
+    * chaturl Non-JavaScript fallback URL.
+    * reindexurl Manager re-index confirmation URL.
+    * reporturl Aggregate report URL.
+    * historyavailable Whether participant-owned history is enabled.
+    * historyurl Participant-owned history URL.
+}}
+<div class="block-courseaiguide" data-region="courseaiguide-block" data-courseid="{{courseid}}">
+    <p class="small text-muted">{{status}}</p>
+    {{#canask}}
+        <button type="button" class="btn btn-primary" data-action="open-courseaiguide">
+            {{#str}}openchat, block_courseaiguide{{/str}}
+        </button>
+        <noscript>
+            <a class="btn btn-primary" href="{{chaturl}}">{{#str}}openchat, block_courseaiguide{{/str}}</a>
+        </noscript>
+    {{/canask}}
+    {{^canask}}
+        <p>{{#str}}unavailable, block_courseaiguide{{/str}}</p>
+    {{/canask}}
+    {{#historyavailable}}
+        <div class="mt-2"><a href="{{historyurl}}">{{#str}}myhistory, block_courseaiguide{{/str}}</a></div>
+    {{/historyavailable}}
+    {{#canmanage}}
+        <div class="mt-2">
+            <a href="{{reindexurl}}">{{#str}}reindex, block_courseaiguide{{/str}}</a>
+            &middot; <a href="{{reporturl}}">{{#str}}viewreport, block_courseaiguide{{/str}}</a>
+        </div>
+    {{/canmanage}}
+</div>

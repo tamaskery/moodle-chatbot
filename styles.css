@@ -1,0 +1,15 @@
+.block-courseaiguide-chat [hidden] {
+    display: none !important;
+}
+
+.block-courseaiguide-chat [data-region="status"]:empty {
+    min-height: 0;
+}
+
+.block-courseaiguide-chat [data-region="status"] {
+    min-height: 1.5rem;
+}
+
+.block-courseaiguide-chat textarea {
+    resize: vertical;
+}
