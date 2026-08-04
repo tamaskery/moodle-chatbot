@@ -33,6 +33,20 @@ final class query_router {
     private const MAX_DATE_FACTS = 20;
 
     /**
+     * Language that asks about an activity schedule or a possible change to it.
+     */
+    private const DATE_INTENT_PATTERN =
+        '/\b(when|deadlines?|due|opens?|opening|close|closes|closing|schedules?|reschedul(?:e|ed|ing)|'
+        . 'extensions?|extended|postponed?|cut.?offs?)\b|submission\s+(?:window|date)/u';
+
+    /**
+     * Date intent that should prefer deadline-like dates over opening dates.
+     */
+    private const DEADLINE_INTENT_PATTERN =
+        '/\b(deadlines?|due|close|closes|closing|schedules?|reschedul(?:e|ed|ing)|extensions?|extended|'
+        . 'postponed?|cut.?offs?)\b|submission\s+(?:window|date)/u';
+
+    /**
      * Return a structured answer or null when textual retrieval should handle the question.
      *
      * @param int $courseid
@@ -54,7 +68,7 @@ final class query_router {
         ) {
             return $this->next_activity($courseid, $userid);
         }
-        if (preg_match('/\b(when|deadlines?|due|opens?|opening|close|closes|closing)\b/u', $normalised)) {
+        if (preg_match(self::DATE_INTENT_PATTERN, $normalised)) {
             return $this->dates($courseid, $userid, $normalised);
         }
         return null;
@@ -130,7 +144,7 @@ final class query_router {
                 break;
             }
         }
-        if (!$matches && preg_match('/\b(deadlines?|due|close|closes|closing)\b/u', $question)) {
+        if (!$matches && preg_match(self::DEADLINE_INTENT_PATTERN, $question)) {
             $matches = $eligible;
         }
         if (!$matches) {
@@ -199,7 +213,7 @@ final class query_router {
      * @return array
      */
     private function multiple_activity_dates(array $cms, int $userid, string $question): array {
-        $deadlineonly = (bool) preg_match('/\b(deadlines?|due|close|closes|closing)\b/u', $question)
+        $deadlineonly = (bool) preg_match(self::DEADLINE_INTENT_PATTERN, $question)
             && !preg_match('/\b(opens?|opening)\b/u', $question);
         $items = [];
         foreach ($cms as $cm) {

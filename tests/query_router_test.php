@@ -97,4 +97,34 @@ final class query_router_test extends \advanced_testcase {
         $this->assertStringContainsString('Capstone report', $result['answer']);
         $this->assertSame(userdate($due), $result['facts'][0]['value']);
     }
+
+    /**
+     * Claims about a changed submission window use Moodle dates, not retrieved prose.
+     */
+    public function test_submission_window_change_uses_authoritative_moodle_date(): void {
+        $this->resetAfterTest();
+        $generator = $this->getDataGenerator();
+        $course = $generator->create_course();
+        $student = $generator->create_user();
+        $generator->enrol_user($student->id, $course->id, 'student');
+        $this->setUser($student);
+        $due = time() + (5 * DAYSECS);
+        $generator->create_module('assign', [
+            'course' => $course->id,
+            'name' => 'Capstone report',
+            'duedate' => $due,
+        ]);
+
+        $result = (new query_router())->answer(
+            $course->id,
+            $student->id,
+            'Has the Capstone report submission window changed or been extended?'
+        );
+
+        $this->assertSame('structured', $result['mode']);
+        $this->assertCount(1, $result['facts']);
+        $this->assertSame(userdate($due), $result['facts'][0]['value']);
+        $this->assertStringContainsString('Capstone report', $result['answer']);
+        $this->assertStringNotContainsString('thirty days', $result['answer']);
+    }
 }

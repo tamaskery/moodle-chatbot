@@ -87,7 +87,7 @@ Server-side conversation storage is disabled by default. A conversation is store
 
 ## Security model
 
-Every request validates parameters, session key, course context, capabilities, active enrolment or management access, course readiness and rate limits. Retrieval is course-scoped. Every candidate is rechecked through its Moodle Search area's `check_access()` and current-user course-module visibility and availability before it can enter the provider prompt or citation list.
+Every request validates parameters, session key, course context, capabilities, active enrolment or management access, course readiness and rate limits. Retrieval is course-scoped. Every candidate is rechecked through its Moodle Search area's `check_access()` and current-user course-module visibility and availability before it can enter the provider prompt or citation list. Reference text matching common prompt-injection patterns is conservatively removed before a provider call. Questions about deadlines, extensions, rescheduling and submission windows are answered from Moodle's user-specific activity dates instead of retrieved prose.
 
 Provider redirects are disabled, response sizes are bounded, endpoint URLs are validated, model-generated URLs are discarded, and rendered model text is inserted as text rather than HTML. Raw prompts, responses, headers and keys are not logged.
 
@@ -123,6 +123,7 @@ Report suspected vulnerabilities privately as described in [SECURITY.md](SECURIT
 - Maintainer: Tamas Kery, <tom@tomkery.eu>
 - Contribution guide: [CONTRIBUTING.md](CONTRIBUTING.md)
 - Test instructions: [docs/TESTING.md](docs/TESTING.md)
+- Adversarial provider protocol: [docs/ADVERSARIAL_TESTING.md](docs/ADVERSARIAL_TESTING.md)
 
 When reporting a provider failure, include the non-sensitive request identifier and administrator diagnostic category. Never post API keys, raw prompts, course content or personal data.
 

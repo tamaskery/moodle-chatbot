@@ -64,7 +64,9 @@ final class orchestrator {
 
         $result = (new query_router())->answer($courseid, $userid, $question);
         if ($result === null) {
-            $chunks = (new database_lexical_backend())->retrieve($courseid, $userid, $question);
+            $chunks = reference_safety::filter(
+                (new database_lexical_backend())->retrieve($courseid, $userid, $question)
+            );
             if (!$chunks) {
                 $result = [
                     'mode' => 'notfound',

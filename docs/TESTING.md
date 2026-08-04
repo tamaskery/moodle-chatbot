@@ -59,4 +59,6 @@ Use full developer debugging and synthetic data.
 10. Test course backup/restore, block deletion, course deletion, upgrade and uninstall.
 11. Test keyboard-only operation, screen-reader labels, focus, zoom and supported core themes.
 
+Run the live provider prompt-injection protocol in [ADVERSARIAL_TESTING.md](ADVERSARIAL_TESTING.md) for every proposed provider/model combination and before each release. This is intentionally an opt-in manual test because it makes a billable external request and must never run with production course data.
+
 Never use production course content or real participant data in public CI.

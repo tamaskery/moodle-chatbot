@@ -47,7 +47,7 @@ final class prompt_builder {
             . 'found (boolean), answer (plain text), sourceids (array of integer source IDs). '
             . 'Do not output HTML, Markdown links, or URLs.';
         $references = [];
-        foreach ($chunks as $chunk) {
+        foreach (reference_safety::filter($chunks) as $chunk) {
             $references[] = [
                 'sourceid' => (int) $chunk['source']['id'],
                 'title' => (string) $chunk['source']['title'],
@@ -55,8 +55,12 @@ final class prompt_builder {
                 'text' => (string) $chunk['content'],
             ];
         }
+        $courseguidance = clean_param($courseinstructions, PARAM_TEXT);
+        if (reference_safety::contains_prompt_injection($courseguidance)) {
+            $courseguidance = '';
+        }
         $data = [
-            'course_guidance_untrusted' => \core_text::substr(clean_param($courseinstructions, PARAM_TEXT), 0, 2000),
+            'course_guidance_untrusted' => \core_text::substr($courseguidance, 0, 2000),
             'reference_records_untrusted' => $references,
             'question' => \core_text::substr(clean_param($question, PARAM_TEXT), 0, 2000),
         ];
