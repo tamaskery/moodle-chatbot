@@ -34,18 +34,28 @@ class block_courseaiguide_edit_form extends block_edit_form {
         $mform->addElement('header', 'configheader', get_string('courseconfig', 'block_courseaiguide'));
         $mform->addElement('advcheckbox', 'config_enabled', get_string('enabled', 'block_courseaiguide'));
         $mform->setDefault('config_enabled', 0);
-        $mform->addElement('advcheckbox', 'config_participantsenabled',
-            get_string('participantsenabled', 'block_courseaiguide'));
+        $mform->addElement(
+            'advcheckbox',
+            'config_participantsenabled',
+            get_string('participantsenabled', 'block_courseaiguide')
+        );
         $mform->setDefault('config_participantsenabled', 0);
 
         foreach (\block_courseaiguide\local\index\source_registry::all_types() as $type => $areaid) {
-            $mform->addElement('advcheckbox', 'config_source_' . $type,
-                get_string('source:' . $type, 'block_courseaiguide'));
+            $mform->addElement(
+                'advcheckbox',
+                'config_source_' . $type,
+                get_string('source:' . $type, 'block_courseaiguide')
+            );
             $mform->setDefault('config_source_' . $type, 1);
         }
 
-        $mform->addElement('textarea', 'config_instructions', get_string('courseinstructions', 'block_courseaiguide'),
-            ['rows' => 5, 'cols' => 60]);
+        $mform->addElement(
+            'textarea',
+            'config_instructions',
+            get_string('courseinstructions', 'block_courseaiguide'),
+            ['rows' => 5, 'cols' => 60]
+        );
         $mform->setType('config_instructions', PARAM_TEXT);
         $mform->addRule('config_instructions', get_string('maximumchars', '', 2000), 'maxlength', 2000, 'client');
         $mform->addElement('advcheckbox', 'config_historyenabled', get_string('historyenabled', 'block_courseaiguide'));

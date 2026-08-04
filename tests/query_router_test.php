@@ -25,9 +25,15 @@ namespace block_courseaiguide;
 
 use block_courseaiguide\local\structured\query_router;
 
-/** Tests for deterministic user-specific Moodle facts. */
+/**
+ * Tests for deterministic user-specific Moodle facts.
+ *
+ * @covers \block_courseaiguide\local\structured\query_router
+ */
 final class query_router_test extends \advanced_testcase {
-    /** Broad deadline questions should return visible activities in chronological order. */
+    /**
+     * Broad deadline questions should return visible activities in chronological order.
+     */
     public function test_broad_deadlines_are_visible_bounded_moodle_facts(): void {
         $this->resetAfterTest();
         $generator = $this->getDataGenerator();
@@ -66,7 +72,9 @@ final class query_router_test extends \advanced_testcase {
         $this->assertSame(userdate($later), $result['facts'][1]['value']);
     }
 
-    /** An explicit activity question should preserve the detailed single-activity response. */
+    /**
+     * An explicit activity question should preserve the detailed single-activity response.
+     */
     public function test_named_activity_keeps_detailed_dates(): void {
         $this->resetAfterTest();
         $generator = $this->getDataGenerator();

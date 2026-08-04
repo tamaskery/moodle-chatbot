@@ -102,7 +102,7 @@ final class course_config {
         if (!$record->enabled) {
             $record->indexstatus = 'disabled';
             $record->indexerror = null;
-        } elseif ($configurationchanged) {
+        } else if ($configurationchanged) {
             $record->indexstatus = 'pending';
             $record->indexerror = null;
         }

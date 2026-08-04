@@ -25,9 +25,15 @@ namespace block_courseaiguide;
 
 use block_courseaiguide\local\provider\chat_payload_builder;
 
-/** Tests for provider request compatibility. */
+/**
+ * Tests for provider request compatibility.
+ *
+ * @covers \block_courseaiguide\local\provider\chat_payload_builder
+ */
 final class chat_payload_builder_test extends \advanced_testcase {
-    /** GPT-5.6 uses the supported low-latency reasoning mode. */
+    /**
+     * GPT-5.6 uses the supported low-latency reasoning mode.
+     */
     public function test_gpt_5_6_payload_uses_none_reasoning(): void {
         $messages = [['role' => 'user', 'content' => 'Question']];
         $payload = json_decode((new chat_payload_builder())->build('gpt-5.6-luna', $messages), true);
@@ -39,7 +45,9 @@ final class chat_payload_builder_test extends \advanced_testcase {
         $this->assertSame(['type' => 'json_object'], $payload['response_format']);
     }
 
-    /** Other compatible providers retain the existing sampling setting. */
+    /**
+     * Other compatible providers retain the existing sampling setting.
+     */
     public function test_other_model_payload_retains_temperature(): void {
         $payload = json_decode((new chat_payload_builder())->build('gpt-4.1-mini', []), true);
 

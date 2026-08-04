@@ -29,7 +29,9 @@ use core_external\external_multiple_structure;
 use core_external\external_single_structure;
 use core_external\external_value;
 
-/** Get current participant-owned conversation messages. */
+/**
+ * Get current participant-owned conversation messages.
+ */
 final class get_conversation extends external_api {
     /**
      * Define parameters for the external function.

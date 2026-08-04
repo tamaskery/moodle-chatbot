@@ -21,9 +21,9 @@
  * @copyright  2026 Tamas Kery <tom@tomkery.eu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die();
-
-/** Restore safe course configuration only. */
+/**
+ * Restore safe course configuration only.
+ */
 class restore_courseaiguide_block_structure_step extends restore_structure_step {
     /**
      * Define the block restore paths.

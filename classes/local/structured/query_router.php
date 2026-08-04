@@ -27,7 +27,9 @@ namespace block_courseaiguide\local\structured;
  * Conservative deterministic router for authoritative Moodle facts.
  */
 final class query_router {
-    /** Maximum number of authoritative dates returned by a broad question. */
+    /**
+     * Maximum number of authoritative dates returned by a broad question.
+     */
     private const MAX_DATE_FACTS = 20;
 
     /**
@@ -40,12 +42,16 @@ final class query_router {
      */
     public function answer(int $courseid, int $userid, string $question): ?array {
         $normalised = \core_text::strtolower(clean_param($question, PARAM_TEXT));
-        if (preg_match('/\b(course).{0,30}(complete|completed|completion)\b/u', $normalised)
-                || preg_match('/\b(complete|completed|completion).{0,30}(course)\b/u', $normalised)) {
+        if (
+            preg_match('/\b(course).{0,30}(complete|completed|completion)\b/u', $normalised)
+                || preg_match('/\b(complete|completed|completion).{0,30}(course)\b/u', $normalised)
+        ) {
             return $this->course_completion($courseid, $userid);
         }
-        if (preg_match('/\b(what|which).{0,30}(next|complete next|do next)\b/u', $normalised)
-                || strpos($normalised, 'what next') !== false) {
+        if (
+            preg_match('/\b(what|which).{0,30}(next|complete next|do next)\b/u', $normalised)
+                || strpos($normalised, 'what next') !== false
+        ) {
             return $this->next_activity($courseid, $userid);
         }
         if (preg_match('/\b(when|deadlines?|due|opens?|opening|close|closes|closing)\b/u', $normalised)) {
@@ -98,7 +104,7 @@ final class query_router {
      */
     private function dates(int $courseid, int $userid, string $question): array {
         $modinfo = get_fast_modinfo($courseid, $userid);
-        $eligible = array_values(array_filter($modinfo->get_cms(), static function($cm): bool {
+        $eligible = array_values(array_filter($modinfo->get_cms(), static function ($cm): bool {
             return $cm->visible && $cm->uservisible && !empty($cm->url);
         }));
         $matches = [];
@@ -118,7 +124,7 @@ final class query_router {
                 if (!preg_match($pattern, $question)) {
                     continue;
                 }
-                $matches = array_values(array_filter($eligible, static function($cm) use ($modname): bool {
+                $matches = array_values(array_filter($eligible, static function ($cm) use ($modname): bool {
                     return $cm->modname === $modname;
                 }));
                 break;
@@ -216,7 +222,7 @@ final class query_router {
                 ];
             }
         }
-        usort($items, static function(array $a, array $b): int {
+        usort($items, static function (array $a, array $b): int {
             return $a['timestamp'] <=> $b['timestamp'] ?: $a['cm']->id <=> $b['cm']->id;
         });
         $items = array_slice($items, 0, self::MAX_DATE_FACTS);

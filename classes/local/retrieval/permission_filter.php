@@ -45,8 +45,10 @@ final class permission_filter {
             return null;
         }
         $config = course_config::get($courseid);
-        if (!$config || (string) $config->indexstatus !== 'ready'
-                || (int) $candidate->generation !== (int) $config->indexgeneration) {
+        if (
+            !$config || (string) $config->indexstatus !== 'ready'
+                || (int) $candidate->generation !== (int) $config->indexgeneration
+        ) {
             return null;
         }
         if (source_registry::type_for_area((string) $candidate->searcharea) !== (string) $candidate->sourcetype) {
@@ -72,7 +74,7 @@ final class permission_filter {
                 if (!$section || !$section->visible || !$section->uservisible) {
                     return null;
                 }
-            } elseif (!empty($candidate->sectionid)) {
+            } else if (!empty($candidate->sectionid)) {
                 $matched = false;
                 foreach ($modinfo->get_section_info_all() as $section) {
                     if ((int) $section->id === (int) $candidate->sectionid) {

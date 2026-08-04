@@ -36,13 +36,22 @@ final class reconcile_indexes extends \core\task\scheduled_task {
         return get_string('task:reconcile', 'block_courseaiguide');
     }
 
-    /** Execute task. */
+    /**
+     * Queue stale or incomplete course indexes for reconciliation.
+     */
     public function execute(): void {
         global $DB;
         $cutoff = time() - 21600;
         $select = 'enabled = 1 AND (indexstatus <> :ready OR timeindexed IS NULL OR timeindexed < :cutoff)';
-        $records = $DB->get_records_select('block_courseaiguide_course', $select,
-            ['ready' => 'ready', 'cutoff' => $cutoff], 'timemodified ASC', 'courseid', 0, 100);
+        $records = $DB->get_records_select(
+            'block_courseaiguide_course',
+            $select,
+            ['ready' => 'ready', 'cutoff' => $cutoff],
+            'timemodified ASC',
+            'courseid',
+            0,
+            100
+        );
         foreach ($records as $record) {
             \block_courseaiguide\local\lifecycle::queue_index((int) $record->courseid);
         }

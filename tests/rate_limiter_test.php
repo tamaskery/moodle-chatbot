@@ -25,9 +25,15 @@ namespace block_courseaiguide;
 
 use block_courseaiguide\local\rate\rate_limiter;
 
-/** Tests for database-backed abuse controls. */
+/**
+ * Tests for database-backed abuse controls.
+ *
+ * @covers \block_courseaiguide\local\rate\rate_limiter
+ */
 final class rate_limiter_test extends \advanced_testcase {
-    /** Per-user/course short limit must fail closed after the configured count. */
+    /**
+     * Per-user/course short limit must fail closed after the configured count.
+     */
     public function test_short_window_limit(): void {
         $this->resetAfterTest();
         $course = $this->getDataGenerator()->create_course();

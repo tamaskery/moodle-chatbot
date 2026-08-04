@@ -24,13 +24,19 @@
 defined('MOODLE_INTERNAL') || die();
 require_once(__DIR__ . '/backup_courseaiguide_block_stepslib.php');
 
-/** Backup task for the Course AI Guide block. */
+/**
+ * Backup task for the Course AI Guide block.
+ */
 class backup_courseaiguide_block_task extends backup_block_task {
-    /** Define settings. */
+    /**
+     * Define settings.
+     */
     protected function define_my_settings(): void {
     }
 
-    /** Define steps. */
+    /**
+     * Define steps.
+     */
     protected function define_my_steps(): void {
         $this->add_step(new backup_courseaiguide_block_structure_step('courseaiguide_structure', 'courseaiguide.xml'));
     }

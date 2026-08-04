@@ -23,7 +23,9 @@
  */
 namespace block_courseaiguide\local\provider;
 
-/** Builds model-compatible Chat Completions request payloads. */
+/**
+ * Builds model-compatible Chat Completions request payloads.
+ */
 final class chat_payload_builder {
     /**
      * Build the JSON request body.

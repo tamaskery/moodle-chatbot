@@ -24,13 +24,19 @@
 defined('MOODLE_INTERNAL') || die();
 require_once(__DIR__ . '/restore_courseaiguide_block_stepslib.php');
 
-/** Restore task for the Course AI Guide block. */
+/**
+ * Restore task for the Course AI Guide block.
+ */
 class restore_courseaiguide_block_task extends restore_block_task {
-    /** Define settings. */
+    /**
+     * Define settings.
+     */
     protected function define_my_settings(): void {
     }
 
-    /** Define steps. */
+    /**
+     * Define steps.
+     */
     protected function define_my_steps(): void {
         $this->add_step(new restore_courseaiguide_block_structure_step('courseaiguide_structure', 'courseaiguide.xml'));
     }
@@ -53,7 +59,9 @@ class restore_courseaiguide_block_task extends restore_block_task {
         return [];
     }
 
-    /** Queue a fresh index; restored participant access remains disabled until success. */
+    /**
+     * Queue a fresh index; restored participant access remains disabled until success.
+     */
     public function after_restore(): void {
         \block_courseaiguide\local\lifecycle::queue_index((int) $this->get_courseid());
     }

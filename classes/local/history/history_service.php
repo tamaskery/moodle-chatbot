@@ -60,13 +60,16 @@ final class history_service {
         $transaction = $DB->start_delegated_transaction();
         $conversation = null;
         if ($conversationtoken !== '') {
-            $conversation = $DB->get_record_select('block_courseaiguide_conv',
-                'publictoken = :token AND courseid = :courseid AND userid = :userid AND expiresat > :now', [
+            $conversation = $DB->get_record_select(
+                'block_courseaiguide_conv',
+                'publictoken = :token AND courseid = :courseid AND userid = :userid AND expiresat > :now',
+                [
                 'token' => $conversationtoken,
                 'courseid' => $courseconfig->courseid,
                 'userid' => $userid,
                 'now' => $now,
-            ]);
+                ]
+            );
         }
         if (!$conversation) {
             $conversation = (object) [
@@ -109,12 +112,17 @@ final class history_service {
      */
     public function list_owned(int $courseid, int $userid): array {
         global $DB;
-        return array_values($DB->get_records_select('block_courseaiguide_conv',
-            'courseid = :courseid AND userid = :userid AND expiresat > :now', [
+        return array_values($DB->get_records_select(
+            'block_courseaiguide_conv',
+            'courseid = :courseid AND userid = :userid AND expiresat > :now',
+            [
                 'courseid' => $courseid,
                 'userid' => $userid,
                 'now' => time(),
-            ], 'timemodified DESC', 'publictoken,timecreated,timemodified,expiresat'));
+            ],
+            'timemodified DESC',
+            'publictoken,timecreated,timemodified,expiresat'
+        ));
     }
 
     /**
@@ -127,23 +135,31 @@ final class history_service {
      */
     public function get_owned(int $courseid, int $userid, string $token): array {
         global $DB;
-        $conversation = $DB->get_record_select('block_courseaiguide_conv',
-            'courseid = :courseid AND userid = :userid AND publictoken = :token AND expiresat > :now', [
+        $conversation = $DB->get_record_select(
+            'block_courseaiguide_conv',
+            'courseid = :courseid AND userid = :userid AND publictoken = :token AND expiresat > :now',
+            [
                 'courseid' => $courseid,
                 'userid' => $userid,
                 'token' => $token,
                 'now' => time(),
-            ]);
+            ]
+        );
         if (!$conversation) {
             return [];
         }
-        return array_values($DB->get_records_select('block_courseaiguide_msg',
-            'courseid = :courseid AND userid = :userid AND conversationid = :conversationid AND expiresat > :now', [
+        return array_values($DB->get_records_select(
+            'block_courseaiguide_msg',
+            'courseid = :courseid AND userid = :userid AND conversationid = :conversationid AND expiresat > :now',
+            [
                 'courseid' => $courseid,
                 'userid' => $userid,
                 'conversationid' => $conversation->id,
                 'now' => time(),
-            ], 'timecreated ASC', 'role,content,timecreated'));
+            ],
+            'timecreated ASC',
+            'role,content,timecreated'
+        ));
     }
 
     /**

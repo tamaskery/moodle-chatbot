@@ -21,9 +21,9 @@
  * @copyright  2026 Tamas Kery <tom@tomkery.eu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die();
-
-/** Safe course-configuration backup structure. */
+/**
+ * Safe course-configuration backup structure.
+ */
 class backup_courseaiguide_block_structure_step extends backup_block_structure_step {
     /**
      * Define the block backup structure.

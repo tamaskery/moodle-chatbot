@@ -48,11 +48,13 @@ final class course_guard {
         if (!$config || empty($config->enabled)) {
             throw new \moodle_exception('error:notenabled', 'block_courseaiguide');
         }
-        if (!$DB->record_exists('block_instances', [
+        if (
+            !$DB->record_exists('block_instances', [
             'id' => $config->blockinstanceid,
             'blockname' => 'courseaiguide',
             'parentcontextid' => $context->id,
-        ])) {
+            ])
+        ) {
             throw new \moodle_exception('error:notenabled', 'block_courseaiguide');
         }
         if (!$ismanaging && empty($config->participantsenabled)) {

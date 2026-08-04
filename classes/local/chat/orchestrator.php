@@ -118,8 +118,11 @@ final class orchestrator {
         }
         $result['conversationid'] = $storedtoken;
         $result['requestid'] = $requestid;
-        (new usage_service())->record($courseid, (string) $result['mode'],
-            (int) round((microtime(true) - $started) * 1000));
+        (new usage_service())->record(
+            $courseid,
+            (string) $result['mode'],
+            (int) round((microtime(true) - $started) * 1000)
+        );
         return $result;
     }
 }

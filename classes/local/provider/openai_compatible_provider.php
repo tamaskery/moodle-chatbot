@@ -29,7 +29,9 @@ use block_courseaiguide\local\config\site_config;
  * OpenAI-compatible provider using Moodle curl and URL security.
  */
 final class openai_compatible_provider implements chat_provider_interface {
-    /** Maximum accepted provider response size (one MiB). */
+    /**
+     * Maximum accepted provider response size (one MiB).
+     */
     private const MAX_RESPONSE_BYTES = 1048576;
 
     /** @var site_config Validated site configuration. */
@@ -44,7 +46,12 @@ final class openai_compatible_provider implements chat_provider_interface {
         $this->config = $config ?? new site_config();
     }
 
-    /** @inheritDoc */
+    /**
+     * Complete a bounded chat request with the configured provider.
+     *
+     * @param chat_request $request Validated chat request.
+     * @return chat_response Provider response.
+     */
     public function complete(chat_request $request): chat_response {
         if (!$this->config->provider_ready()) {
             throw new provider_exception();

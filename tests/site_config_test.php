@@ -25,9 +25,15 @@ namespace block_courseaiguide;
 
 use block_courseaiguide\local\config\site_config;
 
-/** Tests for fail-closed site configuration. */
+/**
+ * Tests for fail-closed site configuration.
+ *
+ * @covers \block_courseaiguide\local\config\site_config
+ */
 final class site_config_test extends \advanced_testcase {
-    /** Provider defaults must be unusable. */
+    /**
+     * Provider defaults must be unusable.
+     */
     public function test_provider_is_disabled_by_default(): void {
         $this->resetAfterTest();
         unset_config('endpoint', 'block_courseaiguide');
@@ -36,7 +42,9 @@ final class site_config_test extends \advanced_testcase {
         $this->assertFalse((new site_config())->provider_ready());
     }
 
-    /** Only a complete credential-free HTTPS URL is accepted. */
+    /**
+     * Only a complete credential-free HTTPS URL is accepted.
+     */
     public function test_provider_requires_safe_https_configuration(): void {
         $this->resetAfterTest();
         set_config('endpoint', 'http://provider.example/v1/chat/completions', 'block_courseaiguide');
@@ -57,7 +65,9 @@ final class site_config_test extends \advanced_testcase {
         $this->assertTrue((new site_config())->provider_ready());
     }
 
-    /** Retention is disabled at zero and clamped to the approved ceiling. */
+    /**
+     * Retention is disabled at zero and clamped to the approved ceiling.
+     */
     public function test_retention_is_bounded(): void {
         $this->resetAfterTest();
         set_config('retentiondays', 0, 'block_courseaiguide');

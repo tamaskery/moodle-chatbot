@@ -1,4 +1,4 @@
-@block_courseaiguide
+@block @block_courseaiguide
 Feature: Add and safely configure the Course AI Guide block
   In order to expose a course guide only after secure setup
   As an authorised course manager

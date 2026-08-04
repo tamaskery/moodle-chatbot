@@ -31,6 +31,8 @@ final class provider_exception extends \moodle_exception {
     private $diagnostic;
 
     /**
+     * Create a sanitised provider exception.
+     *
      * @param string $errorcode
      * @param string $diagnostic Safe category; never provider response text.
      */

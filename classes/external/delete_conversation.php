@@ -28,7 +28,9 @@ use core_external\external_function_parameters;
 use core_external\external_single_structure;
 use core_external\external_value;
 
-/** Delete one current participant-owned conversation. */
+/**
+ * Delete one current participant-owned conversation.
+ */
 final class delete_conversation extends external_api {
     /**
      * Define parameters for the external function.

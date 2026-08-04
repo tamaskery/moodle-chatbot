@@ -29,7 +29,9 @@ use core_external\external_multiple_structure;
 use core_external\external_single_structure;
 use core_external\external_value;
 
-/** List the current participant's retained conversation headers. */
+/**
+ * List the current participant's retained conversation headers.
+ */
 final class list_conversations extends external_api {
     /**
      * Define parameters for the external function.

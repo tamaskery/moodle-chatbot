@@ -25,9 +25,15 @@ namespace block_courseaiguide;
 
 use block_courseaiguide\local\history\history_service;
 
-/** Tests for optional three-gate conversation storage. */
+/**
+ * Tests for optional three-gate conversation storage.
+ *
+ * @covers \block_courseaiguide\local\history\history_service
+ */
 final class history_service_test extends \advanced_testcase {
-    /** No-store mode must create no personal message records. */
+    /**
+     * No-store mode must create no personal message records.
+     */
     public function test_no_store_default_creates_no_records(): void {
         global $DB;
         $this->resetAfterTest();
@@ -43,7 +49,9 @@ final class history_service_test extends \advanced_testcase {
         $this->assertFalse($DB->record_exists('block_courseaiguide_msg', ['userid' => $user->id]));
     }
 
-    /** All three gates allow participant-owned storage and deletion. */
+    /**
+     * All three gates allow participant-owned storage and deletion.
+     */
     public function test_opted_in_turn_is_owned_and_deletable(): void {
         global $DB;
         $this->resetAfterTest();
@@ -63,7 +71,9 @@ final class history_service_test extends \advanced_testcase {
         $this->assertFalse($DB->record_exists('block_courseaiguide_msg', ['userid' => $user->id]));
     }
 
-    /** Missing participant opt-in must prevent writes. */
+    /**
+     * Missing participant opt-in must prevent writes.
+     */
     public function test_participant_opt_in_is_required(): void {
         global $DB;
         $this->resetAfterTest();
@@ -77,7 +87,9 @@ final class history_service_test extends \advanced_testcase {
         $this->assertEquals(0, $DB->count_records('block_courseaiguide_conv'));
     }
 
-    /** An expired token must not revive an expired conversation or its messages. */
+    /**
+     * An expired token must not revive an expired conversation or its messages.
+     */
     public function test_expired_conversation_cannot_be_revived(): void {
         global $DB;
         $this->resetAfterTest();
@@ -89,8 +101,12 @@ final class history_service_test extends \advanced_testcase {
         $oldtoken = $service->store_turn($config, $user->id, true, '', 'Old question', 'Old answer', 'request1');
         $conversation = $DB->get_record('block_courseaiguide_conv', ['publictoken' => $oldtoken], '*', MUST_EXIST);
         $DB->set_field('block_courseaiguide_conv', 'expiresat', time() - 1, ['id' => $conversation->id]);
-        $DB->set_field('block_courseaiguide_msg', 'expiresat', time() - 1,
-            ['conversationid' => $conversation->id]);
+        $DB->set_field(
+            'block_courseaiguide_msg',
+            'expiresat',
+            time() - 1,
+            ['conversationid' => $conversation->id]
+        );
 
         $newtoken = $service->store_turn(
             $config,
@@ -107,7 +123,9 @@ final class history_service_test extends \advanced_testcase {
         $this->assertCount(2, $service->get_owned($course->id, $user->id, $newtoken));
     }
 
-    /** Expired messages are hidden even while their conversation remains active. */
+    /**
+     * Expired messages are hidden even while their conversation remains active.
+     */
     public function test_expired_messages_are_not_returned(): void {
         global $DB;
         $this->resetAfterTest();

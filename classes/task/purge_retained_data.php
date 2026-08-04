@@ -38,7 +38,9 @@ final class purge_retained_data extends \core\task\scheduled_task {
         return get_string('task:purge', 'block_courseaiguide');
     }
 
-    /** Execute task. */
+    /**
+     * Purge expired conversation and rate-limit records.
+     */
     public function execute(): void {
         global $DB;
         $now = time();
@@ -48,14 +50,28 @@ final class purge_retained_data extends \core\task\scheduled_task {
             $DB->delete_records('block_courseaiguide_conv');
         } else {
             $maximumexpiry = $now + ($days * DAYSECS);
-            $DB->set_field_select('block_courseaiguide_msg', 'expiresat', $maximumexpiry,
-                'expiresat > :maximumexpiry', ['maximumexpiry' => $maximumexpiry]);
-            $DB->set_field_select('block_courseaiguide_conv', 'expiresat', $maximumexpiry,
-                'expiresat > :maximumexpiry', ['maximumexpiry' => $maximumexpiry]);
+            $DB->set_field_select(
+                'block_courseaiguide_msg',
+                'expiresat',
+                $maximumexpiry,
+                'expiresat > :maximumexpiry',
+                ['maximumexpiry' => $maximumexpiry]
+            );
+            $DB->set_field_select(
+                'block_courseaiguide_conv',
+                'expiresat',
+                $maximumexpiry,
+                'expiresat > :maximumexpiry',
+                ['maximumexpiry' => $maximumexpiry]
+            );
         }
 
-        $disabledcourses = $DB->get_fieldset_select('block_courseaiguide_course', 'courseid',
-            'historyenabled = :historyenabled', ['historyenabled' => 0]);
+        $disabledcourses = $DB->get_fieldset_select(
+            'block_courseaiguide_course',
+            'courseid',
+            'historyenabled = :historyenabled',
+            ['historyenabled' => 0]
+        );
         if ($disabledcourses) {
             [$coursesql, $courseparams] = $DB->get_in_or_equal(
                 $disabledcourses,

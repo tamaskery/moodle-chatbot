@@ -27,7 +27,9 @@ namespace block_courseaiguide\task;
  * Ad-hoc course indexing task.
  */
 final class index_course extends \core\task\adhoc_task {
-    /** Execute task. */
+    /**
+     * Index the course identified in the custom task data.
+     */
     public function execute(): void {
         global $DB;
 

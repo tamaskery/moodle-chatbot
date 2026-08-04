@@ -61,7 +61,7 @@ final class answer_validator {
         if ($answer === '') {
             throw new provider_exception('error:invalidresponse');
         }
-        $allowedids = array_map(static function(array $chunk): int {
+        $allowedids = array_map(static function (array $chunk): int {
             return (int) $chunk['source']['id'];
         }, $chunks);
         $sources = (new citation_mapper())->map($courseid, $userid, $allowedids, $decoded['sourceids']);

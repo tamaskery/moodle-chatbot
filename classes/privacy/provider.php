@@ -35,11 +35,15 @@ use core_privacy\local\request\userlist;
  * Moodle Privacy API provider.
  */
 final class provider implements
-        \core_privacy\local\metadata\provider,
-        \core_privacy\local\request\plugin\provider,
-        \core_privacy\local\request\core_userlist_provider {
-
-    /** @inheritDoc */
+    \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\core_userlist_provider,
+    \core_privacy\local\request\plugin\provider {
+    /**
+     * Describe personal data stored or sent by the plugin.
+     *
+     * @param collection $collection Privacy metadata collection.
+     * @return collection Updated metadata collection.
+     */
     public static function get_metadata(collection $collection): collection {
         $collection->add_database_table('block_courseaiguide_conv', [
             'courseid' => 'privacy:metadata:courseid',
@@ -77,7 +81,12 @@ final class provider implements
         return $collection;
     }
 
-    /** @inheritDoc */
+    /**
+     * Return course contexts containing data for a user.
+     *
+     * @param int $userid User ID.
+     * @return contextlist Relevant course contexts.
+     */
     public static function get_contexts_for_userid(int $userid): contextlist {
         $contextlist = new contextlist();
         $params = ['contextlevel' => CONTEXT_COURSE, 'userid' => $userid];
@@ -91,7 +100,11 @@ final class provider implements
         return $contextlist;
     }
 
-    /** @inheritDoc */
+    /**
+     * Export a user's retained conversations and rate-limit records.
+     *
+     * @param approved_contextlist $contextlist Approved contexts.
+     */
     public static function export_user_data(approved_contextlist $contextlist): void {
         global $DB;
         $userid = (int) $contextlist->get_user()->id;
@@ -131,7 +144,11 @@ final class provider implements
         }
     }
 
-    /** @inheritDoc */
+    /**
+     * Delete all personal data in a course context.
+     *
+     * @param \context $context Context to delete.
+     */
     public static function delete_data_for_all_users_in_context(\context $context): void {
         if ($context->contextlevel !== CONTEXT_COURSE) {
             return;
@@ -139,7 +156,11 @@ final class provider implements
         self::delete_for_course((int) $context->instanceid, null);
     }
 
-    /** @inheritDoc */
+    /**
+     * Delete personal data for one user in approved contexts.
+     *
+     * @param approved_contextlist $contextlist Approved contexts and user.
+     */
     public static function delete_data_for_user(approved_contextlist $contextlist): void {
         $userid = (int) $contextlist->get_user()->id;
         foreach ($contextlist->get_contexts() as $context) {
@@ -149,7 +170,11 @@ final class provider implements
         }
     }
 
-    /** @inheritDoc */
+    /**
+     * Add users with stored data in a course context.
+     *
+     * @param userlist $userlist User-list accumulator.
+     */
     public static function get_users_in_context(userlist $userlist): void {
         $context = $userlist->get_context();
         if ($context->contextlevel !== CONTEXT_COURSE) {
@@ -166,7 +191,11 @@ final class provider implements
         ]);
     }
 
-    /** @inheritDoc */
+    /**
+     * Delete data for approved users in a course context.
+     *
+     * @param approved_userlist $userlist Approved users and context.
+     */
     public static function delete_data_for_users(approved_userlist $userlist): void {
         $context = $userlist->get_context();
         if ($context->contextlevel !== CONTEXT_COURSE) {

@@ -25,15 +25,23 @@ namespace block_courseaiguide;
 
 use block_courseaiguide\local\provider\provider_exception;
 
-/** Tests for safe provider diagnostics. */
+/**
+ * Tests for safe provider diagnostics.
+ *
+ * @covers \block_courseaiguide\local\provider\provider_exception
+ */
 final class provider_exception_test extends \advanced_testcase {
-    /** Unknown diagnostic values cannot propagate to administrators. */
+    /**
+     * Unknown diagnostic values cannot propagate to administrators.
+     */
     public function test_diagnostic_is_allowlisted(): void {
         $exception = new provider_exception('error:provider', 'raw provider response');
         $this->assertSame('provider_error', $exception->diagnostic());
     }
 
-    /** Safe diagnostic categories remain available. */
+    /**
+     * Safe diagnostic categories remain available.
+     */
     public function test_known_diagnostic_is_retained(): void {
         $exception = new provider_exception('error:provider', 'authentication');
         $this->assertSame('authentication', $exception->diagnostic());

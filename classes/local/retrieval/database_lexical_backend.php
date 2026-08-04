@@ -37,12 +37,21 @@ final class database_lexical_backend implements retrieval_backend_interface {
     /** @var permission_filter User-specific source permission filter. */
     private $filter;
 
-    /** Constructor. */
+    /**
+     * Create the database-backed retriever.
+     */
     public function __construct() {
         $this->filter = new permission_filter();
     }
 
-    /** @inheritDoc */
+    /**
+     * Retrieve user-visible course chunks using bounded lexical scoring.
+     *
+     * @param int $courseid Course ID.
+     * @param int $userid User ID.
+     * @param string $query Plain-text query.
+     * @return array Ranked, permission-filtered chunks.
+     */
     public function retrieve(int $courseid, int $userid, string $query): array {
         global $DB;
 
@@ -98,7 +107,7 @@ final class database_lexical_backend implements retrieval_backend_interface {
                 ];
             }
         }
-        usort($scored, static function(array $a, array $b): int {
+        usort($scored, static function (array $a, array $b): int {
             return $b['score'] <=> $a['score'] ?: $a['chunkid'] <=> $b['chunkid'];
         });
 
@@ -136,7 +145,7 @@ final class database_lexical_backend implements retrieval_backend_interface {
     private function terms(string $query): array {
         $query = \core_text::strtolower(\core_text::substr(clean_param($query, PARAM_TEXT), 0, 1000));
         $tokens = preg_split('/[^\p{L}\p{N}]+/u', $query, -1, PREG_SPLIT_NO_EMPTY) ?: [];
-        $tokens = array_values(array_unique(array_filter($tokens, static function(string $token): bool {
+        $tokens = array_values(array_unique(array_filter($tokens, static function (string $token): bool {
             return \core_text::strlen($token) >= 2;
         })));
         return array_slice($tokens, 0, 12);

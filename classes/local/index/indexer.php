@@ -166,7 +166,7 @@ final class indexer {
             } catch (\Throwable $e) {
                 return;
             }
-        } elseif ($areaid === 'core_course-section') {
+        } else if ($areaid === 'core_course-section') {
             $sectionid = (int) $itemid;
         }
 

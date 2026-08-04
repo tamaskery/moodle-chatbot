@@ -25,15 +25,23 @@ namespace block_courseaiguide;
 
 use block_courseaiguide\local\index\chunker;
 
-/** Tests for deterministic content chunking. */
+/**
+ * Tests for deterministic content chunking.
+ *
+ * @covers \block_courseaiguide\local\index\chunker
+ */
 final class chunker_test extends \advanced_testcase {
-    /** Short text should form one unchanged chunk. */
+    /**
+     * Short text should form one unchanged chunk.
+     */
     public function test_short_text_is_one_chunk(): void {
         $chunks = (new chunker())->split('One two three');
         $this->assertSame(['One two three'], $chunks);
     }
 
-    /** Long text should use the configured 100-word overlap. */
+    /**
+     * Long text should use the configured 100-word overlap.
+     */
     public function test_long_text_has_expected_overlap(): void {
         $words = [];
         for ($index = 0; $index < 900; $index++) {
@@ -45,7 +53,9 @@ final class chunker_test extends \advanced_testcase {
         $this->assertStringStartsWith('word700', $chunks[1]);
     }
 
-    /** Empty text should produce no index rows. */
+    /**
+     * Empty text should produce no index rows.
+     */
     public function test_empty_text_has_no_chunks(): void {
         $this->assertSame([], (new chunker())->split("  \n  "));
     }

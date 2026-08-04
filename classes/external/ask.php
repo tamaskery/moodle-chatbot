@@ -64,7 +64,10 @@ final class ask extends external_api {
     ): array {
         global $USER;
         $params = self::validate_parameters(self::execute_parameters(), compact(
-            'courseid', 'question', 'savehistory', 'conversationid'
+            'courseid',
+            'question',
+            'savehistory',
+            'conversationid'
         ));
         require_sesskey();
         $course = get_course($params['courseid']);
