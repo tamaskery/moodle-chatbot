@@ -53,6 +53,8 @@ Open **Site administration → Plugins → Blocks → Course AI Guide** and conf
 - optional retention and aggregate-statistics settings;
 - per-user/course request limits.
 
+This release supports one site-wide OpenAI-compatible provider configuration. Multiple saved provider profiles, per-course provider selection and automatic provider fallback are not supported. To switch providers, a site administrator must replace the configured endpoint, model and API key.
+
 The endpoint, model and key are unset by default. Retention is zero, statistics are disabled, and no course is participant-accessible by default.
 
 The administrator is responsible for approving the AI provider, model, contract, data-processing terms, data residency, disclaimer and acceptable-use policy. Test model compatibility before enabling participant access.
