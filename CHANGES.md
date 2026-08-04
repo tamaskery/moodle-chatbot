@@ -1,5 +1,12 @@
 # Change log
 
+## 0.1.1 — 2026-08-04
+
+- Send GPT-5.6 Chat Completions requests with explicit `reasoning_effort: none`.
+- Omit the incompatible sampling parameter for GPT-5.6 while preserving it for other providers.
+- Add regression coverage for model-aware provider payloads.
+- Show administrators an allowlisted failure category without exposing provider response data.
+
 ## 0.1.0 — 2026-08-03
 
 - Initial secure MVP implementation.
