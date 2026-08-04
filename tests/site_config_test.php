@@ -75,4 +75,17 @@ final class site_config_test extends \advanced_testcase {
         set_config('retentiondays', 999, 'block_courseaiguide');
         $this->assertSame(365, (new site_config())->retention_days());
     }
+
+    /**
+     * The site-wide provider ceiling has a safe default and hard bounds.
+     */
+    public function test_site_provider_limit_is_bounded(): void {
+        $this->resetAfterTest();
+        unset_config('siteprovidercalllimit', 'block_courseaiguide');
+        $this->assertSame(1000, (new site_config())->site_daily_provider_limit());
+        set_config('siteprovidercalllimit', -5, 'block_courseaiguide');
+        $this->assertSame(1, (new site_config())->site_daily_provider_limit());
+        set_config('siteprovidercalllimit', 2000000, 'block_courseaiguide');
+        $this->assertSame(1000000, (new site_config())->site_daily_provider_limit());
+    }
 }

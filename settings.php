@@ -24,6 +24,22 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
+    try {
+        $breakerstatus = (new \block_courseaiguide\local\rate\site_circuit_breaker())->status();
+        if ($breakerstatus['open']) {
+            $settings->add(new admin_setting_heading(
+                'block_courseaiguide/sitecircuitbreakerwarning',
+                get_string('settings:sitecircuitbreaker_open', 'block_courseaiguide'),
+                get_string('settings:sitecircuitbreaker_open_desc', 'block_courseaiguide', (object) [
+                    'calls' => $breakerstatus['calls'],
+                    'limit' => $breakerstatus['limit'],
+                    'reset' => userdate($breakerstatus['resetat']),
+                ])
+            ));
+        }
+    } catch (\Throwable $e) {
+        // The table may not exist yet while Moodle is performing an upgrade.
+    }
     $settings->add(new admin_setting_heading(
         'block_courseaiguide/providersettings',
         get_string('settings:providerheading', 'block_courseaiguide'),
@@ -81,6 +97,13 @@ if ($ADMIN->fulltree) {
         get_string('settings:ratelimitday', 'block_courseaiguide'),
         get_string('settings:ratelimitday_desc', 'block_courseaiguide'),
         100,
+        PARAM_INT
+    ));
+    $settings->add(new admin_setting_configtext(
+        'block_courseaiguide/siteprovidercalllimit',
+        get_string('settings:siteprovidercalllimit', 'block_courseaiguide'),
+        get_string('settings:siteprovidercalllimit_desc', 'block_courseaiguide'),
+        1000,
         PARAM_INT
     ));
 }

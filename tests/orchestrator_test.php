@@ -100,6 +100,7 @@ final class orchestrator_test extends \advanced_testcase {
         set_config('retentiondays', 0, 'block_courseaiguide');
         set_config('ratelimitshort', 10, 'block_courseaiguide');
         set_config('ratelimitday', 100, 'block_courseaiguide');
+        set_config('siteprovidercalllimit', 1000, 'block_courseaiguide');
         $this->setUser($student);
 
         $result = (new orchestrator())->ask(
@@ -113,6 +114,7 @@ final class orchestrator_test extends \advanced_testcase {
         $this->assertSame([], $result['sources']);
         $this->assertSame('', $result['conversationid']);
         $this->assertMatchesRegularExpression('/^[a-f0-9]{16}$/', $result['requestid']);
+        $this->assertFalse($DB->record_exists('block_courseaiguide_site', []));
     }
 
     /**

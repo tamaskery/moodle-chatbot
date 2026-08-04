@@ -28,6 +28,7 @@ use block_courseaiguide\local\history\history_service;
 use block_courseaiguide\local\provider\provider_exception;
 use block_courseaiguide\local\provider\provider_factory;
 use block_courseaiguide\local\rate\rate_limiter;
+use block_courseaiguide\local\rate\site_circuit_breaker;
 use block_courseaiguide\local\retrieval\database_lexical_backend;
 use block_courseaiguide\local\structured\query_router;
 use block_courseaiguide\local\usage\usage_service;
@@ -76,6 +77,7 @@ final class orchestrator {
                 ];
             } else {
                 try {
+                    (new site_circuit_breaker())->reserve();
                     $request = (new prompt_builder())->build(
                         $question,
                         (string) $courseconfig->instructions,

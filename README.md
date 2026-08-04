@@ -51,7 +51,8 @@ Open **Site administration → Plugins → Blocks → Course AI Guide** and conf
 - the provider API key;
 - the participant disclaimer;
 - optional retention and aggregate-statistics settings;
-- per-user/course request limits.
+- per-user/course request limits;
+- the site-wide daily provider-call ceiling.
 
 This release supports one site-wide OpenAI-compatible provider configuration. Multiple saved provider profiles, per-course provider selection and automatic provider fallback are not supported. To switch providers, a site administrator must replace the configured endpoint, model and API key.
 
@@ -90,6 +91,8 @@ Server-side conversation storage is disabled by default. A conversation is store
 Every request validates parameters, session key, course context, capabilities, active enrolment or management access, course readiness and rate limits. Retrieval is course-scoped. Every candidate is rechecked through its Moodle Search area's `check_access()` and current-user course-module visibility and availability before it can enter the provider prompt or citation list. Reference text matching common prompt-injection patterns is conservatively removed before a provider call. Questions about deadlines, extensions, rescheduling and submission windows are answered from Moodle's user-specific activity dates instead of retrieved prose.
 
 Provider redirects are disabled, response sizes are bounded, endpoint URLs are validated, model-generated URLs are discarded, and rendered model text is inserted as text rather than HTML. Raw prompts, responses, headers and keys are not logged.
+
+A database-backed site circuit breaker permits at most the administrator-configured number of logical external provider calls per UTC day across all courses and users (default: 1,000). The reservation is atomic, failed provider attempts count, and Moodle-only or not-found answers do not. At the ceiling, external calls pause until the next UTC day or until an administrator raises the limit. Site administrators receive one Moodle notification and the plugin settings show a persistent warning. This is a request ceiling, not a currency estimate; administrators must choose it from their provider pricing and institutional budget.
 
 Report suspected vulnerabilities privately as described in [SECURITY.md](SECURITY.md).
 

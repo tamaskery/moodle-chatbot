@@ -15,18 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Course AI Guide plugin.
+ * Message providers for Course AI Guide.
  *
  * @package    block_courseaiguide
  * @copyright  2026 Tamas Kery <tom@tomkery.eu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'block_courseaiguide';
-$plugin->version = 2026080406;
-$plugin->requires = 2024100700;
-$plugin->supported = [405, 502];
-$plugin->maturity = MATURITY_BETA;
-$plugin->release = '0.2.0-beta1';
+$messageproviders = [
+    'sitecircuitbreaker' => [
+        'capability' => 'moodle/site:config',
+    ],
+];

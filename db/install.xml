@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="blocks/courseaiguide/db" VERSION="20260803" COMMENT="XMLDB file for block_courseaiguide"
+<XMLDB PATH="blocks/courseaiguide/db" VERSION="20260804" COMMENT="XMLDB file for block_courseaiguide"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
   <TABLES>
@@ -170,6 +170,22 @@
       <INDEXES>
         <INDEX NAME="windowuniq" UNIQUE="true" FIELDS="courseid,userid,windowtype,windowstart"/>
         <INDEX NAME="expiryidx" UNIQUE="false" FIELDS="windowend"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_courseaiguide_site" COMMENT="Site-wide daily external provider-call circuit breaker">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="daystart" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="providercalls" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="trippedat" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="notifiedat" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="dayuniq" UNIQUE="true" FIELDS="daystart"/>
       </INDEXES>
     </TABLE>
   </TABLES>

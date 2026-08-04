@@ -101,6 +101,16 @@ final class site_config {
     }
 
     /**
+     * Return the site-wide daily logical provider-call ceiling.
+     *
+     * @return int Provider calls allowed across the whole site each UTC day.
+     */
+    public function site_daily_provider_limit(): int {
+        $limit = (int) get_config('block_courseaiguide', 'siteprovidercalllimit') ?: 1000;
+        return max(1, min(1000000, $limit));
+    }
+
+    /**
      * Whether the provider settings are complete and structurally safe.
      *
      * @return bool

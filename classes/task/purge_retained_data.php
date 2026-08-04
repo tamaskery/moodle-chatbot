@@ -90,5 +90,10 @@ final class purge_retained_data extends \core\task\scheduled_task {
             $DB->delete_records_select('block_courseaiguide_conv', "id $insql", $params);
         }
         $DB->delete_records_select('block_courseaiguide_rate', 'windowend <= :now', ['now' => $now]);
+        $DB->delete_records_select(
+            'block_courseaiguide_site',
+            'daystart < :oldestday',
+            ['oldestday' => $now - (7 * DAYSECS)]
+        );
     }
 }

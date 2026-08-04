@@ -25,6 +25,7 @@ namespace block_courseaiguide\local\access;
 
 use block_courseaiguide\local\config\course_config;
 use block_courseaiguide\local\config\site_config;
+use block_courseaiguide\local\rate\site_circuit_breaker;
 
 /**
  * Central fail-closed course request guard.
@@ -63,6 +64,16 @@ final class course_guard {
         $siteconfig = new site_config();
         if (!$siteconfig->provider_ready()) {
             throw new \moodle_exception('error:providernotready', 'block_courseaiguide');
+        }
+        $breaker = new site_circuit_breaker($siteconfig);
+        $status = $breaker->status();
+        if ($status['open']) {
+            throw new \moodle_exception(
+                'error:sitecircuitbreaker',
+                'block_courseaiguide',
+                '',
+                userdate($status['resetat'])
+            );
         }
         if ((string) $config->indexstatus !== 'ready') {
             throw new \moodle_exception('error:indexnotready', 'block_courseaiguide');

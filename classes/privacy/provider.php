@@ -78,6 +78,7 @@ final class provider implements
             'coursefacts' => 'privacy:metadata:provider',
             'courseexcerpts' => 'privacy:metadata:provider',
         ], 'privacy:metadata:provider');
+        $collection->add_subsystem_link('core_message', [], 'privacy:metadata:core_message');
         return $collection;
     }
 
