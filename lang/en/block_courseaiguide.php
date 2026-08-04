@@ -80,6 +80,7 @@ $string['error:indexlock'] = 'Course indexing is already running.';
 $string['error:ratelimited'] = 'You have reached the course guide request limit. Please try again later.';
 $string['error:rateunavailable'] = 'The request limit could not be checked safely. Please try again later.';
 $string['error:provider'] = 'The AI service is temporarily unavailable. Quote request ID {$a} when asking for support.';
+$string['error:provideradmin'] = 'Administrator diagnostic: {$a}.';
 $string['error:invalidresponse'] = 'The AI service returned an invalid response. Quote request ID {$a} when asking for support.';
 $string['error:emptyquestion'] = 'Enter a question.';
 $string['notfound'] = 'I could not find this in the course.';
