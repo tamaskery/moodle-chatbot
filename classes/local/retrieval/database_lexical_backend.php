@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Course AI Guide plugin.
@@ -23,20 +23,18 @@
  */
 namespace block_courseaiguide\local\retrieval;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Database-neutral bounded lexical retrieval.
  */
 final class database_lexical_backend implements retrieval_backend_interface {
-    /** @var int */
+    /** @var int Maximum database candidates scored per request. */
     private const MAXCANDIDATES = 200;
-    /** @var int */
+    /** @var int Maximum chunks returned after scoring. */
     private const MAXRESULTS = 8;
-    /** @var int */
+    /** @var int Maximum reference-context characters returned. */
     private const MAXCONTEXTCHARS = 12000;
 
-    /** @var permission_filter */
+    /** @var permission_filter User-specific source permission filter. */
     private $filter;
 
     /** Constructor. */

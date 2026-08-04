@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Course AI Guide plugin.
@@ -29,11 +29,13 @@ use core_external\external_multiple_structure;
 use core_external\external_single_structure;
 use core_external\external_value;
 
-defined('MOODLE_INTERNAL') || die();
-
 /** Get current participant-owned conversation messages. */
 final class get_conversation extends external_api {
-    /** @return external_function_parameters */
+    /**
+     * Define parameters for the external function.
+     *
+     * @return external_function_parameters The parameter definition.
+     */
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course id'),
@@ -41,7 +43,13 @@ final class get_conversation extends external_api {
         ]);
     }
 
-    /** @param int $courseid @param string $conversationid @return array */
+    /**
+     * Return messages from an owned conversation.
+     *
+     * @param int $courseid Course ID.
+     * @param string $conversationid Conversation token.
+     * @return array Conversation messages.
+     */
     public static function execute(int $courseid, string $conversationid): array {
         global $USER;
         $params = self::validate_parameters(self::execute_parameters(), compact('courseid', 'conversationid'));
@@ -56,7 +64,11 @@ final class get_conversation extends external_api {
         );
     }
 
-    /** @return external_multiple_structure */
+    /**
+     * Define the external function return structure.
+     *
+     * @return external_multiple_structure The return definition.
+     */
     public static function execute_returns(): external_multiple_structure {
         return new external_multiple_structure(new external_single_structure([
             'role' => new external_value(PARAM_ALPHA, 'user or assistant'),

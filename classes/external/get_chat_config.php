@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Course AI Guide plugin.
@@ -30,20 +30,27 @@ use core_external\external_function_parameters;
 use core_external\external_single_structure;
 use core_external\external_value;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Get safe browser configuration.
  */
 final class get_chat_config extends external_api {
-    /** @return external_function_parameters */
+    /**
+     * Define parameters for the external function.
+     *
+     * @return external_function_parameters The parameter definition.
+     */
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course id'),
         ]);
     }
 
-    /** @param int $courseid @return array */
+    /**
+     * Return safe browser configuration for a course.
+     *
+     * @param int $courseid Course ID.
+     * @return array Safe client configuration.
+     */
     public static function execute(int $courseid): array {
         global $USER;
         $params = self::validate_parameters(self::execute_parameters(), compact('courseid'));
@@ -58,7 +65,11 @@ final class get_chat_config extends external_api {
         ];
     }
 
-    /** @return external_single_structure */
+    /**
+     * Define the external function return structure.
+     *
+     * @return external_single_structure The return definition.
+     */
     public static function execute_returns(): external_single_structure {
         return new external_single_structure([
             'disclaimer' => new external_value(PARAM_TEXT, 'Approved disclaimer'),

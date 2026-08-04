@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Course AI Guide plugin.
@@ -24,8 +24,6 @@
 namespace block_courseaiguide;
 
 use block_courseaiguide\local\provider\chat_payload_builder;
-
-defined('MOODLE_INTERNAL') || die();
 
 /** Tests for provider request compatibility. */
 final class chat_payload_builder_test extends \advanced_testcase {

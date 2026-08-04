@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Course AI Guide plugin.
@@ -25,7 +25,11 @@ defined('MOODLE_INTERNAL') || die();
 
 /** Safe course-configuration backup structure. */
 class backup_courseaiguide_block_structure_step extends backup_block_structure_step {
-    /** @return backup_nested_element */
+    /**
+     * Define the block backup structure.
+     *
+     * @return backup_nested_element The root backup element.
+     */
     protected function define_structure(): backup_nested_element {
         $guide = new backup_nested_element('courseaiguide', ['id'], [
             'enabled', 'sourceareas', 'instructions', 'historyenabled',

@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Course AI Guide plugin.
@@ -22,8 +22,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace block_courseaiguide\local\structured;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Conservative deterministic router for authoritative Moodle facts.
@@ -300,7 +298,11 @@ final class query_router {
         return $this->not_found();
     }
 
-    /** @return array */
+    /**
+     * Return the deterministic not-found response.
+     *
+     * @return array Structured response payload.
+     */
     private function not_found(): array {
         return [
             'mode' => 'notfound',

@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Course AI Guide plugin.
@@ -21,28 +21,40 @@
  * @copyright  2026 Tamas Kery <tom@tomkery.eu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Course AI Guide block.
  */
 class block_courseaiguide extends block_base {
-    /** Initialise the block. */
+    /**
+     * Initialise the block title.
+     */
     public function init(): void {
         $this->title = get_string('pluginname', 'block_courseaiguide');
     }
 
-    /** @return bool */
+    /**
+     * Whether the block has global configuration.
+     *
+     * @return bool
+     */
     public function has_config(): bool {
         return true;
     }
 
-    /** @return bool */
+    /**
+     * Whether more than one instance can be added to a course.
+     *
+     * @return bool
+     */
     public function instance_allow_multiple(): bool {
         return false;
     }
 
-    /** @return array */
+    /**
+     * Return the page formats supported by the course-only block.
+     *
+     * @return array
+     */
     public function applicable_formats(): array {
         return [
             'all' => false,
@@ -52,7 +64,11 @@ class block_courseaiguide extends block_base {
         ];
     }
 
-    /** @return stdClass */
+    /**
+     * Build the block content for the current course and user.
+     *
+     * @return stdClass
+     */
     public function get_content(): stdClass {
         global $OUTPUT, $USER;
 
@@ -95,7 +111,11 @@ class block_courseaiguide extends block_base {
         return $this->content;
     }
 
-    /** @return bool */
+    /**
+     * Create the course configuration record for this block instance.
+     *
+     * @return bool Whether the instance was created successfully.
+     */
     public function instance_create(): bool {
         if (!empty($this->page->course->id) && (int) $this->page->course->id !== SITEID) {
             $data = (object) ['enabled' => 0];
@@ -131,7 +151,11 @@ class block_courseaiguide extends block_base {
         return $saved;
     }
 
-    /** @return bool */
+    /**
+     * Purge plugin data when this block instance is deleted.
+     *
+     * @return bool Whether the instance was deleted successfully.
+     */
     public function instance_delete(): bool {
         global $DB;
         $record = $DB->get_record('block_courseaiguide_course', ['blockinstanceid' => $this->instance->id]);

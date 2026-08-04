@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Course AI Guide plugin.
@@ -23,17 +23,15 @@
  */
 namespace block_courseaiguide\local\index;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Stable Unicode-aware word chunker.
  */
 final class chunker {
-    /** @var int */
+    /** @var int Target words per chunk. */
     private const WORDS = 800;
-    /** @var int */
+    /** @var int Overlapping words between chunks. */
     private const OVERLAP = 100;
-    /** @var int */
+    /** @var int Maximum chunks generated from one source. */
     private const MAXCHUNKS = 50;
 
     /**

@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Course AI Guide plugin.
@@ -35,12 +35,21 @@ class backup_courseaiguide_block_task extends backup_block_task {
         $this->add_step(new backup_courseaiguide_block_structure_step('courseaiguide_structure', 'courseaiguide.xml'));
     }
 
-    /** @return array */
+    /**
+     * Return the file areas included in the backup.
+     *
+     * @return array The file area names.
+     */
     public function get_fileareas(): array {
         return [];
     }
 
-    /** @param string $content @return string */
+    /**
+     * Encode content links during backup.
+     *
+     * @param string $content Content to encode.
+     * @return string Encoded content.
+     */
     public static function encode_content_links($content): string {
         return $content;
     }

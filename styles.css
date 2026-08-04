@@ -1,5 +1,5 @@
 .block-courseaiguide-chat [hidden] {
-    display: none !important;
+    display: none;
 }
 
 .block-courseaiguide-chat [data-region="status"]:empty {

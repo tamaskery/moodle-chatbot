@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Course AI Guide plugin.
@@ -23,13 +23,15 @@
  */
 namespace block_courseaiguide\local\provider;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Server-only provider construction.
  */
 final class provider_factory {
-    /** @return chat_provider_interface */
+    /**
+     * Create the configured chat provider.
+     *
+     * @return chat_provider_interface Provider instance.
+     */
     public function create(): chat_provider_interface {
         return new openai_compatible_provider();
     }

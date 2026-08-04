@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Course AI Guide plugin.
@@ -25,8 +25,6 @@ namespace block_courseaiguide\local\provider;
 
 use block_courseaiguide\local\config\site_config;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * OpenAI-compatible provider using Moodle curl and URL security.
  */
@@ -34,10 +32,14 @@ final class openai_compatible_provider implements chat_provider_interface {
     /** Maximum accepted provider response size (one MiB). */
     private const MAX_RESPONSE_BYTES = 1048576;
 
-    /** @var site_config */
+    /** @var site_config Validated site configuration. */
     private $config;
 
-    /** @param site_config|null $config */
+    /**
+     * Create an OpenAI-compatible provider.
+     *
+     * @param site_config|null $config Optional validated site configuration.
+     */
     public function __construct(?site_config $config = null) {
         $this->config = $config ?? new site_config();
     }

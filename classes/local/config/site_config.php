@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Course AI Guide plugin.
@@ -23,49 +23,79 @@
  */
 namespace block_courseaiguide\local\config;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Validated site configuration access.
  */
 final class site_config {
-    /** @return string */
+    /**
+     * Return the configured provider endpoint.
+     *
+     * @return string Provider endpoint URL.
+     */
     public function endpoint(): string {
         return trim((string) get_config('block_courseaiguide', 'endpoint'));
     }
 
-    /** @return string */
+    /**
+     * Return the configured provider model.
+     *
+     * @return string Provider model name.
+     */
     public function model(): string {
         return trim((string) get_config('block_courseaiguide', 'model'));
     }
 
-    /** @return string */
+    /**
+     * Return the configured provider API key.
+     *
+     * @return string Provider API key.
+     */
     public function apikey(): string {
         return (string) get_config('block_courseaiguide', 'apikey');
     }
 
-    /** @return string */
+    /**
+     * Return the approved participant disclaimer.
+     *
+     * @return string Disclaimer text.
+     */
     public function disclaimer(): string {
         return (string) get_config('block_courseaiguide', 'disclaimer');
     }
 
-    /** @return int */
+    /**
+     * Return the bounded conversation-retention period.
+     *
+     * @return int Retention period in days, or zero when disabled.
+     */
     public function retention_days(): int {
         $days = (int) get_config('block_courseaiguide', 'retentiondays');
         return $days <= 0 ? 0 : min(365, max(1, $days));
     }
 
-    /** @return bool */
+    /**
+     * Return whether aggregate statistics are enabled.
+     *
+     * @return bool Whether aggregate statistics are enabled.
+     */
     public function statistics_enabled(): bool {
         return (bool) get_config('block_courseaiguide', 'statisticsenabled');
     }
 
-    /** @return int */
+    /**
+     * Return the short-window request limit.
+     *
+     * @return int Requests allowed in the short window.
+     */
     public function short_rate_limit(): int {
         return max(1, min(1000, (int) get_config('block_courseaiguide', 'ratelimitshort') ?: 10));
     }
 
-    /** @return int */
+    /**
+     * Return the daily request limit.
+     *
+     * @return int Requests allowed each day.
+     */
     public function daily_rate_limit(): int {
         return max(1, min(10000, (int) get_config('block_courseaiguide', 'ratelimitday') ?: 100));
     }

@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Course AI Guide plugin.
@@ -58,7 +58,12 @@ class restore_courseaiguide_block_task extends restore_block_task {
         \block_courseaiguide\local\lifecycle::queue_index((int) $this->get_courseid());
     }
 
-    /** @param string $content @return string */
+    /**
+     * Decode content links during restore.
+     *
+     * @param string $content Content to decode.
+     * @return string Decoded content.
+     */
     public static function decode_content_links($content): string {
         return $content;
     }

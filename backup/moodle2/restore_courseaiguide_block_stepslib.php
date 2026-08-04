@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Course AI Guide plugin.
@@ -25,12 +25,20 @@ defined('MOODLE_INTERNAL') || die();
 
 /** Restore safe course configuration only. */
 class restore_courseaiguide_block_structure_step extends restore_structure_step {
-    /** @return array */
+    /**
+     * Define the block restore paths.
+     *
+     * @return array The restore path elements.
+     */
     protected function define_structure(): array {
         return [new restore_path_element('courseaiguide', '/block/courseaiguide')];
     }
 
-    /** @param array|stdClass $data */
+    /**
+     * Restore one Course AI Guide configuration record.
+     *
+     * @param array|stdClass $data Restored record data.
+     */
     public function process_courseaiguide($data): void {
         $data = (object) $data;
         $config = (object) [

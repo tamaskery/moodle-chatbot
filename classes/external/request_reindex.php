@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Course AI Guide plugin.
@@ -28,18 +28,25 @@ use core_external\external_function_parameters;
 use core_external\external_single_structure;
 use core_external\external_value;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Queue a manager-requested course re-index.
  */
 final class request_reindex extends external_api {
-    /** @return external_function_parameters */
+    /**
+     * Define parameters for the external function.
+     *
+     * @return external_function_parameters The parameter definition.
+     */
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters(['courseid' => new external_value(PARAM_INT, 'Course id')]);
     }
 
-    /** @param int $courseid @return array */
+    /**
+     * Queue a course reindex for an authorised manager.
+     *
+     * @param int $courseid Course ID.
+     * @return array Queue result.
+     */
     public static function execute(int $courseid): array {
         $params = self::validate_parameters(self::execute_parameters(), compact('courseid'));
         require_sesskey();
@@ -52,7 +59,11 @@ final class request_reindex extends external_api {
         return ['queued' => true];
     }
 
-    /** @return external_single_structure */
+    /**
+     * Define the external function return structure.
+     *
+     * @return external_single_structure The return definition.
+     */
     public static function execute_returns(): external_single_structure {
         return new external_single_structure(['queued' => new external_value(PARAM_BOOL, 'Queued')]);
     }

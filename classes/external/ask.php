@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Course AI Guide plugin.
@@ -29,13 +29,15 @@ use core_external\external_multiple_structure;
 use core_external\external_single_structure;
 use core_external\external_value;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Ask the course guide.
  */
 final class ask extends external_api {
-    /** @return external_function_parameters */
+    /**
+     * Define parameters for the external function.
+     *
+     * @return external_function_parameters The parameter definition.
+     */
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Validated course id'),
@@ -77,7 +79,11 @@ final class ask extends external_api {
         );
     }
 
-    /** @return external_single_structure */
+    /**
+     * Define the external function return structure.
+     *
+     * @return external_single_structure The return definition.
+     */
     public static function execute_returns(): external_single_structure {
         return new external_single_structure([
             'mode' => new external_value(PARAM_ALPHA, 'structured, rag, notfound, or error'),

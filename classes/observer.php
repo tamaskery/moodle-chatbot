@@ -8,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Course AI Guide plugin.
@@ -23,26 +23,36 @@
  */
 namespace block_courseaiguide;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Lightweight event observers.
  */
 final class observer {
-    /** @param \core\event\base $event */
+    /**
+     * Queue indexing after relevant course content changes.
+     *
+     * @param \core\event\base $event Moodle event.
+     */
     public static function content_changed(\core\event\base $event): void {
         if (!empty($event->courseid)) {
             \block_courseaiguide\local\lifecycle::queue_index((int) $event->courseid);
         }
     }
 
-    /** @param \core\event\course_module_deleted $event */
+    /**
+     * Remove indexed content after a course module is deleted.
+     *
+     * @param \core\event\course_module_deleted $event Course-module deletion event.
+     */
     public static function module_deleted(\core\event\course_module_deleted $event): void {
         \block_courseaiguide\local\lifecycle::purge_module((int) $event->courseid, (int) $event->contextinstanceid);
         \block_courseaiguide\local\lifecycle::queue_index((int) $event->courseid);
     }
 
-    /** @param \core\event\course_deleted $event */
+    /**
+     * Purge all plugin data after a course is deleted.
+     *
+     * @param \core\event\course_deleted $event Course deletion event.
+     */
     public static function course_deleted(\core\event\course_deleted $event): void {
         \block_courseaiguide\local\lifecycle::purge_course((int) $event->objectid);
     }
