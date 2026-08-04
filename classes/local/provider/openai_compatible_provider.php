@@ -18,7 +18,7 @@
  * Course AI Guide plugin.
  *
  * @package    block_courseaiguide
- * @copyright  2026 Course AI Guide contributors
+ * @copyright  2026 Tamas Kery <tom@tomkery.eu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace block_courseaiguide\local\provider;
@@ -31,6 +31,9 @@ defined('MOODLE_INTERNAL') || die();
  * OpenAI-compatible provider using Moodle curl and URL security.
  */
 final class openai_compatible_provider implements chat_provider_interface {
+    /** Maximum accepted provider response size (one MiB). */
+    private const MAX_RESPONSE_BYTES = 1048576;
+
     /** @var site_config */
     private $config;
 
@@ -49,8 +52,10 @@ final class openai_compatible_provider implements chat_provider_interface {
         $options = [
             'CURLOPT_CONNECTTIMEOUT' => 5,
             'CURLOPT_TIMEOUT' => 30,
-            'CURLOPT_FOLLOWLOCATION' => true,
-            'CURLOPT_MAXREDIRS' => 3,
+            // Never forward the bearer token to a redirect destination.
+            'CURLOPT_FOLLOWLOCATION' => false,
+            'CURLOPT_MAXREDIRS' => 0,
+            'CURLOPT_MAXFILESIZE' => self::MAX_RESPONSE_BYTES,
             'CURLOPT_HTTPHEADER' => [
                 'Content-Type: application/json',
                 'Accept: application/json',
@@ -65,6 +70,9 @@ final class openai_compatible_provider implements chat_provider_interface {
             $errno = (int) $curl->get_errno();
             $info = $curl->get_info();
             $status = is_array($info) ? (int) ($info['http_code'] ?? 0) : (int) ($info->http_code ?? 0);
+            if (is_string($raw) && strlen($raw) > self::MAX_RESPONSE_BYTES) {
+                throw new provider_exception('error:invalidresponse', 'response_too_large');
+            }
             $transient = $errno !== 0 || $status === 429 || ($status >= 500 && $status <= 599);
             if ($errno === 0 && $status >= 200 && $status <= 299 && is_string($raw)) {
                 $decoded = json_decode($raw, true, 32);

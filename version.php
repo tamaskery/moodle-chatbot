@@ -18,14 +18,15 @@
  * Course AI Guide plugin.
  *
  * @package    block_courseaiguide
- * @copyright  2026 Course AI Guide contributors
+ * @copyright  2026 Tamas Kery <tom@tomkery.eu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'block_courseaiguide';
-$plugin->version = 2026080400;
+$plugin->version = 2026080403;
 $plugin->requires = 2024100700;
-$plugin->maturity = MATURITY_ALPHA;
-$plugin->release = '0.1.1';
+$plugin->supported = [405, 502];
+$plugin->maturity = MATURITY_BETA;
+$plugin->release = '0.2.0-beta1';

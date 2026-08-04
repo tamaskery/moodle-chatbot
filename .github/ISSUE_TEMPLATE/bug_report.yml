@@ -1,0 +1,52 @@
+name: Bug report
+description: Report reproducible non-security behaviour in Course AI Guide.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Do not report vulnerabilities or include API keys, personal data, prompts, responses or private course content. Follow SECURITY.md for security reports.
+  - type: input
+    id: pluginversion
+    attributes:
+      label: Course AI Guide version
+      placeholder: 0.2.0-beta1
+    validations:
+      required: true
+  - type: input
+    id: moodleversion
+    attributes:
+      label: Moodle and PHP versions
+      placeholder: Moodle 4.5.7, PHP 8.2
+    validations:
+      required: true
+  - type: input
+    id: database
+    attributes:
+      label: Database
+      placeholder: PostgreSQL 16
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps with synthetic data
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Sanitised debugging evidence
+      description: Remove credentials, identifiers, prompts, responses, personal data and private course content.

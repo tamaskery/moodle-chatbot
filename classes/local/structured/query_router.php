@@ -18,7 +18,7 @@
  * Course AI Guide plugin.
  *
  * @package    block_courseaiguide
- * @copyright  2026 Course AI Guide contributors
+ * @copyright  2026 Tamas Kery <tom@tomkery.eu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace block_courseaiguide\local\structured;
@@ -29,6 +29,9 @@ defined('MOODLE_INTERNAL') || die();
  * Conservative deterministic router for authoritative Moodle facts.
  */
 final class query_router {
+    /** Maximum number of authoritative dates returned by a broad question. */
+    private const MAX_DATE_FACTS = 20;
+
     /**
      * Return a structured answer or null when textual retrieval should handle the question.
      *
@@ -47,7 +50,7 @@ final class query_router {
                 || strpos($normalised, 'what next') !== false) {
             return $this->next_activity($courseid, $userid);
         }
-        if (preg_match('/\b(when|deadline|due|open|close|closes)\b/u', $normalised)) {
+        if (preg_match('/\b(when|deadlines?|due|opens?|opening|close|closes|closing)\b/u', $normalised)) {
             return $this->dates($courseid, $userid, $normalised);
         }
         return null;
@@ -97,34 +100,53 @@ final class query_router {
      */
     private function dates(int $courseid, int $userid, string $question): array {
         $modinfo = get_fast_modinfo($courseid, $userid);
+        $eligible = array_values(array_filter($modinfo->get_cms(), static function($cm): bool {
+            return $cm->visible && $cm->uservisible && !empty($cm->url);
+        }));
         $matches = [];
-        foreach ($modinfo->get_cms() as $cm) {
-            if (!$cm->visible || !$cm->uservisible || !$cm->url) {
-                continue;
-            }
+        foreach ($eligible as $cm) {
             $name = \core_text::strtolower($cm->name);
             if ($name !== '' && strpos($question, $name) !== false) {
                 $matches[] = $cm;
             }
         }
         if (!$matches) {
-            foreach (['quiz', 'assign'] as $modname) {
-                $keyword = $modname === 'assign' ? 'assignment' : 'quiz';
-                if (strpos($question, $keyword) === false) {
+            $typematches = [
+                'assign' => '/\bassignments?\b/u',
+                'quiz' => '/\b(quiz|quizzes)\b/u',
+                'scorm' => '/\bscorm\b/u',
+            ];
+            foreach ($typematches as $modname => $pattern) {
+                if (!preg_match($pattern, $question)) {
                     continue;
                 }
-                $typed = array_values(array_filter($modinfo->get_instances_of($modname), static function($cm): bool {
-                    return $cm->visible && $cm->uservisible && !empty($cm->url);
+                $matches = array_values(array_filter($eligible, static function($cm) use ($modname): bool {
+                    return $cm->modname === $modname;
                 }));
-                if (count($typed) === 1) {
-                    $matches = $typed;
-                }
+                break;
             }
         }
-        if (count($matches) !== 1) {
+        if (!$matches && preg_match('/\b(deadlines?|due|close|closes|closing)\b/u', $question)) {
+            $matches = $eligible;
+        }
+        if (!$matches) {
             return $this->not_found();
         }
-        $cm = reset($matches);
+
+        if (count($matches) === 1) {
+            return $this->single_activity_dates(reset($matches), $userid);
+        }
+        return $this->multiple_activity_dates($matches, $userid, $question);
+    }
+
+    /**
+     * Build the existing detailed answer for one unambiguous activity.
+     *
+     * @param \cm_info $cm
+     * @param int $userid
+     * @return array
+     */
+    private function single_activity_dates(\cm_info $cm, int $userid): array {
         $dates = \core\activity_dates::get_dates_for_module($cm, $userid);
         if (!$dates) {
             return $this->not_found();
@@ -136,7 +158,7 @@ final class query_router {
                 continue;
             }
             $display = userdate((int) $date['timestamp']);
-            $label = clean_param((string) $date['label'], PARAM_TEXT);
+            $label = rtrim(clean_param((string) $date['label'], PARAM_TEXT), " :\t\n\r\0\x0B");
             $displaydates[] = $label . ': ' . $display;
             $facts[] = [
                 'type' => 'activitydate',
@@ -161,6 +183,79 @@ final class query_router {
                 'type' => $cm->modname,
                 'url' => $cm->url->out(false),
             ]],
+        ];
+    }
+
+    /**
+     * Build a bounded chronological answer across visible activities.
+     *
+     * @param array $cms
+     * @param int $userid
+     * @param string $question
+     * @return array
+     */
+    private function multiple_activity_dates(array $cms, int $userid, string $question): array {
+        $deadlineonly = (bool) preg_match('/\b(deadlines?|due|close|closes|closing)\b/u', $question)
+            && !preg_match('/\b(opens?|opening)\b/u', $question);
+        $items = [];
+        foreach ($cms as $cm) {
+            $dates = \core\activity_dates::get_dates_for_module($cm, $userid);
+            if (!$dates) {
+                continue;
+            }
+            foreach ($dates as $date) {
+                if (empty($date['timestamp'])) {
+                    continue;
+                }
+                $label = rtrim(clean_param((string) $date['label'], PARAM_TEXT), " :\t\n\r\0\x0B");
+                if ($deadlineonly && !preg_match('/\b(due|close|closes|closing|deadline|cut.?off|until|end)\b/ui', $label)) {
+                    continue;
+                }
+                $items[] = [
+                    'timestamp' => (int) $date['timestamp'],
+                    'cm' => $cm,
+                    'label' => $label,
+                ];
+            }
+        }
+        usort($items, static function(array $a, array $b): int {
+            return $a['timestamp'] <=> $b['timestamp'] ?: $a['cm']->id <=> $b['cm']->id;
+        });
+        $items = array_slice($items, 0, self::MAX_DATE_FACTS);
+        if (!$items) {
+            return $this->not_found();
+        }
+
+        $facts = [];
+        $displaydates = [];
+        $sources = [];
+        foreach ($items as $item) {
+            $cm = $item['cm'];
+            $display = userdate($item['timestamp']);
+            $factlabel = get_string('activitydatelabel', 'block_courseaiguide', (object) [
+                'activity' => $cm->name,
+                'label' => $item['label'],
+            ]);
+            $url = $cm->url->out(false);
+            $displaydates[] = $factlabel . ': ' . $display;
+            $facts[] = [
+                'type' => 'activitydate',
+                'label' => $factlabel,
+                'value' => $display,
+                'url' => $url,
+            ];
+            $sources[$cm->id] = [
+                'id' => 0,
+                'title' => $cm->name,
+                'type' => $cm->modname,
+                'url' => $url,
+            ];
+        }
+        return [
+            'mode' => 'structured',
+            'answer' => get_string('deadlinesanswer', 'block_courseaiguide', implode('; ', $displaydates)),
+            'facts' => $facts,
+            'sources' => array_values($sources),
         ];
     }
 

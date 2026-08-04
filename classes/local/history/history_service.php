@@ -18,7 +18,7 @@
  * Course AI Guide plugin.
  *
  * @package    block_courseaiguide
- * @copyright  2026 Course AI Guide contributors
+ * @copyright  2026 Tamas Kery <tom@tomkery.eu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace block_courseaiguide\local\history;
@@ -59,12 +59,15 @@ final class history_service {
         }
         $now = time();
         $expires = $now + ($days * DAYSECS);
+        $transaction = $DB->start_delegated_transaction();
         $conversation = null;
         if ($conversationtoken !== '') {
-            $conversation = $DB->get_record('block_courseaiguide_conv', [
-                'publictoken' => $conversationtoken,
+            $conversation = $DB->get_record_select('block_courseaiguide_conv',
+                'publictoken = :token AND courseid = :courseid AND userid = :userid AND expiresat > :now', [
+                'token' => $conversationtoken,
                 'courseid' => $courseconfig->courseid,
                 'userid' => $userid,
+                'now' => $now,
             ]);
         }
         if (!$conversation) {
@@ -95,6 +98,7 @@ final class history_service {
                 'timecreated' => $now,
             ]);
         }
+        $transaction->allow_commit();
         return (string) $conversation->publictoken;
     }
 
@@ -135,11 +139,13 @@ final class history_service {
         if (!$conversation) {
             return [];
         }
-        return array_values($DB->get_records('block_courseaiguide_msg', [
-            'courseid' => $courseid,
-            'userid' => $userid,
-            'conversationid' => $conversation->id,
-        ], 'timecreated ASC', 'role,content,timecreated'));
+        return array_values($DB->get_records_select('block_courseaiguide_msg',
+            'courseid = :courseid AND userid = :userid AND conversationid = :conversationid AND expiresat > :now', [
+                'courseid' => $courseid,
+                'userid' => $userid,
+                'conversationid' => $conversation->id,
+                'now' => time(),
+            ], 'timecreated ASC', 'role,content,timecreated'));
     }
 
     /**
@@ -159,7 +165,9 @@ final class history_service {
         if (!$conversation) {
             return;
         }
+        $transaction = $DB->start_delegated_transaction();
         $DB->delete_records('block_courseaiguide_msg', ['conversationid' => $conversation->id]);
         $DB->delete_records('block_courseaiguide_conv', ['id' => $conversation->id]);
+        $transaction->allow_commit();
     }
 }

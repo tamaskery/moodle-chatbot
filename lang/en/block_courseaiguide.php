@@ -18,7 +18,7 @@
  * Course AI Guide plugin.
  *
  * @package    block_courseaiguide
- * @copyright  2026 Course AI Guide contributors
+ * @copyright  2026 Tamas Kery <tom@tomkery.eu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 $string['pluginname'] = 'Course AI Guide';
@@ -85,6 +85,8 @@ $string['error:invalidresponse'] = 'The AI service returned an invalid response.
 $string['error:emptyquestion'] = 'Enter a question.';
 $string['notfound'] = 'I could not find this in the course.';
 $string['deadlineanswer'] = '{$a->activity}: {$a->dates}';
+$string['deadlinesanswer'] = 'Moodle shows these course dates: {$a}';
+$string['activitydatelabel'] = '{$a->activity} — {$a->label}';
 $string['nextanswer'] = 'The next eligible incomplete activity is {$a}.';
 $string['coursecompletion'] = 'Course completion';
 $string['coursecomplete'] = 'Moodle records this course as complete for you.';

@@ -17,7 +17,7 @@
  * Course AI Guide modal controller.
  *
  * @module     block_courseaiguide/chat
- * @copyright  2026 Course AI Guide contributors
+ * @copyright  2026 Tamas Kery <tom@tomkery.eu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

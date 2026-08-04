@@ -18,7 +18,7 @@
  * Course AI Guide plugin.
  *
  * @package    block_courseaiguide
- * @copyright  2026 Course AI Guide contributors
+ * @copyright  2026 Tamas Kery <tom@tomkery.eu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace block_courseaiguide;
@@ -47,6 +47,12 @@ final class site_config_test extends \advanced_testcase {
         $this->assertFalse((new site_config())->provider_ready());
 
         set_config('endpoint', 'https://user:pass@provider.example/v1/chat/completions', 'block_courseaiguide');
+        $this->assertFalse((new site_config())->provider_ready());
+
+        set_config('endpoint', "https://provider.example/v1/chat/\ncompletions", 'block_courseaiguide');
+        $this->assertFalse((new site_config())->provider_ready());
+
+        set_config('endpoint', 'https://provider.example/v1/chat/completions#redirect-target', 'block_courseaiguide');
         $this->assertFalse((new site_config())->provider_ready());
 
         set_config('endpoint', 'https://provider.example/v1/chat/completions', 'block_courseaiguide');

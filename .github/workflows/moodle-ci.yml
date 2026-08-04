@@ -15,13 +15,13 @@ concurrency:
 
 jobs:
   test:
-    name: Moodle ${{ matrix.moodle }} / PHP ${{ matrix.php }} / PostgreSQL ${{ matrix.postgres }}
+    name: ${{ matrix.name }}
     runs-on: ubuntu-22.04
-    timeout-minutes: 45
+    timeout-minutes: 60
 
     services:
       postgres:
-        image: postgres:${{ matrix.postgres }}
+        image: postgres:16
         env:
           POSTGRES_USER: postgres
           POSTGRES_HOST_AUTH_METHOD: trust
@@ -32,30 +32,51 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+          MYSQL_CHARACTER_SET_SERVER: utf8mb4
+          MYSQL_COLLATION_SERVER: utf8mb4_unicode_ci
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     strategy:
       fail-fast: false
       matrix:
         include:
-          - moodle: "4.5"
-            moodlebranch: MOODLE_405_STABLE
+          - name: Moodle 4.5 / PHP 8.1 / PostgreSQL
+            moodle-branch: MOODLE_405_STABLE
             php: "8.1"
-            postgres: "13"
-          - moodle: "5.0"
-            moodlebranch: MOODLE_500_STABLE
-            php: "8.2"
-            postgres: "14"
-          - moodle: "5.1"
-            moodlebranch: MOODLE_501_STABLE
-            php: "8.2"
-            postgres: "15"
-          - moodle: "5.2"
-            moodlebranch: MOODLE_502_STABLE
+            database: pgsql
+          - name: Moodle 4.5 / PHP 8.3 / MySQL
+            moodle-branch: MOODLE_405_STABLE
             php: "8.3"
-            postgres: "16"
+            database: mysqli
+          - name: Moodle 5.0 / PHP 8.2 / PostgreSQL
+            moodle-branch: MOODLE_500_STABLE
+            php: "8.2"
+            database: pgsql
+          - name: Moodle 5.1 / PHP 8.2 / PostgreSQL
+            moodle-branch: MOODLE_501_STABLE
+            php: "8.2"
+            database: pgsql
+          - name: Moodle 5.2 / PHP 8.3 / PostgreSQL
+            moodle-branch: MOODLE_502_STABLE
+            php: "8.3"
+            database: pgsql
+          - name: Moodle 5.2 / PHP 8.4 / MySQL
+            moodle-branch: MOODLE_502_STABLE
+            php: "8.4"
+            database: mysqli
 
     steps:
-      - name: Check out plugin
+      - name: Check out repository
         uses: actions/checkout@v4
         with:
           path: plugin
@@ -67,7 +88,7 @@ jobs:
           ini-values: max_input_vars=5000
           coverage: none
 
-      - name: Install moodle-plugin-ci
+      - name: Initialise Moodle Plugin CI
         run: |
           composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^4
           echo "$(cd ci/bin && pwd)" >> "$GITHUB_PATH"
@@ -78,8 +99,8 @@ jobs:
       - name: Install Moodle and plugin
         run: moodle-plugin-ci install --plugin ./plugin --db-host=127.0.0.1
         env:
-          DB: pgsql
-          MOODLE_BRANCH: ${{ matrix.moodlebranch }}
+          DB: ${{ matrix.database }}
+          MOODLE_BRANCH: ${{ matrix.moodle-branch }}
 
       - name: PHP lint
         if: ${{ !cancelled() }}
@@ -105,7 +126,7 @@ jobs:
         if: ${{ !cancelled() }}
         run: moodle-plugin-ci mustache
 
-      - name: Grunt AMD checks
+      - name: JavaScript and CSS validation
         if: ${{ !cancelled() }}
         run: moodle-plugin-ci grunt --max-lint-warnings 0
 
@@ -113,17 +134,20 @@ jobs:
         if: ${{ !cancelled() }}
         run: moodle-plugin-ci phpunit --fail-on-warning
 
-      - name: Behat features
+      - name: Behat scenarios
         id: behat
         if: ${{ !cancelled() }}
         run: moodle-plugin-ci behat --profile chrome --scss-deprecations
 
-      - name: Upload Behat failure artifacts
+      - name: Upload Behat failure evidence
         if: ${{ failure() && steps.behat.outcome == 'failure' }}
         uses: actions/upload-artifact@v4
         with:
-          name: behat-faildump-moodle-${{ matrix.moodle }}-php-${{ matrix.php }}
+          name: behat-faildump-${{ matrix.moodle-branch }}-php${{ matrix.php }}-${{ matrix.database }}
           path: ${{ github.workspace }}/moodledata/behat_dump
           retention-days: 7
           if-no-files-found: ignore
 
+      - name: Mark cancelled jobs as failed
+        if: ${{ cancelled() }}
+        run: exit 1

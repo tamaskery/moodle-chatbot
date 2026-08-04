@@ -18,7 +18,7 @@
  * Course AI Guide plugin.
  *
  * @package    block_courseaiguide
- * @copyright  2026 Course AI Guide contributors
+ * @copyright  2026 Tamas Kery <tom@tomkery.eu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace block_courseaiguide\local\config;
@@ -76,14 +76,17 @@ final class site_config {
      * @return bool
      */
     public function provider_ready(): bool {
-        $parts = parse_url($this->endpoint());
-        return $this->endpoint() !== ''
+        $endpoint = $this->endpoint();
+        $parts = parse_url($endpoint);
+        return $endpoint !== ''
             && $this->model() !== ''
             && $this->apikey() !== ''
+            && !preg_match('/[\x00-\x20\x7f]/', $endpoint)
             && is_array($parts)
             && ($parts['scheme'] ?? '') === 'https'
             && empty($parts['user'])
             && empty($parts['pass'])
+            && empty($parts['fragment'])
             && !empty($parts['host']);
     }
 }
