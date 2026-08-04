@@ -128,7 +128,15 @@ jobs:
 
       - name: JavaScript and CSS validation
         if: ${{ !cancelled() }}
-        run: moodle-plugin-ci grunt --max-lint-warnings 0
+        run: |
+          moodle-plugin-ci grunt --tasks=gherkinlint --tasks=stylelint --max-lint-warnings 0
+          if [ -d "$GITHUB_WORKSPACE/moodle/public/blocks/courseaiguide" ]; then
+            pluginroot="public/blocks/courseaiguide"
+          else
+            pluginroot="blocks/courseaiguide"
+          fi
+          cd "$GITHUB_WORKSPACE/moodle"
+          npx grunt eslint:amd --root="$pluginroot" --max-lint-warnings=0
 
       - name: PHPUnit tests
         if: ${{ !cancelled() }}
