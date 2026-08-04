@@ -8,3 +8,6 @@
 *.mustache text eol=lf
 *.feature text eol=lf
 *.zip binary
+
+.gitattributes export-ignore
+.github export-ignore
