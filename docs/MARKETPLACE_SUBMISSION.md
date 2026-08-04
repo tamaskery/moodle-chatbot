@@ -50,9 +50,9 @@ Recommended reviewer scenarios:
 
 Prepare current screenshots without real user or course data:
 
-- block in ready state;
-- chat modal with authoritative Moodle facts;
-- source-grounded explanation with citations;
+- block in ready state (`docs/screenshots/course-ready-state.png`);
+- chat modal with authoritative Moodle facts (`docs/screenshots/authoritative-deadlines.png`);
+- source-grounded explanation with citations (`docs/screenshots/source-grounded-answer.png`);
 - administrator settings with the API key obscured;
 - course configuration and source whitelist.
 

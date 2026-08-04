@@ -100,6 +100,20 @@ Report suspected vulnerabilities privately as described in [SECURITY.md](SECURIT
 - Quiz questions, answers, feedback, attempts, submissions and grades are excluded.
 - The plugin provides a web interface and does not currently implement Moodle App-specific UI support.
 
+## Screenshots
+
+### Course-ready state
+
+![Course AI Guide block ready in a synthetic validation course](docs/screenshots/course-ready-state.png)
+
+### Authoritative Moodle dates
+
+![Course AI Guide showing deterministic Moodle deadline facts](docs/screenshots/authoritative-deadlines.png)
+
+### Source-grounded explanation
+
+![Course AI Guide showing an AI-generated explanation with a server-validated source](docs/screenshots/source-grounded-answer.png)
+
 ## Support and development
 
 - Source: <https://github.com/tamaskery/moodle-chatbot>
