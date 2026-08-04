@@ -85,9 +85,18 @@ final class orchestrator {
                     $rawresponse = (new provider_factory())->create()->complete($request);
                     $result = (new answer_validator())->validate($rawresponse, $courseid, $userid, $chunks);
                 } catch (provider_exception $e) {
+                    $answer = get_string('error:provider', 'block_courseaiguide', $requestid);
+                    $context = \context_course::instance($courseid);
+                    if (has_capability('block/courseaiguide:manage', $context, $userid)) {
+                        $answer .= ' ' . get_string(
+                            'error:provideradmin',
+                            'block_courseaiguide',
+                            $e->diagnostic()
+                        );
+                    }
                     $result = [
                         'mode' => 'error',
-                        'answer' => get_string('error:provider', 'block_courseaiguide', $requestid),
+                        'answer' => $answer,
                         'facts' => [],
                         'sources' => [],
                     ];
