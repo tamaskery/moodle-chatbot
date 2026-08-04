@@ -13,6 +13,19 @@
     * reporturl Aggregate report URL.
     * historyavailable Whether participant-owned history is enabled.
     * historyurl Participant-owned history URL.
+
+    Example context (json):
+    {
+        "courseid": 42,
+        "canask": true,
+        "canmanage": true,
+        "status": "Ready",
+        "chaturl": "https://moodle.example/blocks/courseaiguide/chat.php?courseid=42",
+        "reindexurl": "https://moodle.example/blocks/courseaiguide/reindex.php?courseid=42",
+        "reporturl": "https://moodle.example/blocks/courseaiguide/report.php?courseid=42",
+        "historyavailable": true,
+        "historyurl": "https://moodle.example/blocks/courseaiguide/history.php?courseid=42"
+    }
 }}
 <div class="block-courseaiguide" data-region="courseaiguide-block" data-courseid="{{courseid}}">
     <p class="small text-muted">{{status}}</p>

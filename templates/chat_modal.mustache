@@ -6,6 +6,12 @@
     Context variables required for this template:
     * disclaimer Administrator-approved AI disclaimer.
     * historyavailable Whether explicit participant opt-in may retain the turn.
+
+    Example context (json):
+    {
+        "disclaimer": "AI-generated explanations may be wrong. Moodle facts are authoritative.",
+        "historyavailable": true
+    }
 }}
 <div class="block-courseaiguide-chat" data-region="courseaiguide-chat">
     <p class="alert alert-info" data-region="disclaimer">{{disclaimer}}</p>
