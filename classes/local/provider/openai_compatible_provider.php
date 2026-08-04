@@ -44,15 +44,7 @@ final class openai_compatible_provider implements chat_provider_interface {
         if (!$this->config->provider_ready()) {
             throw new provider_exception();
         }
-        $payload = json_encode([
-            'model' => $this->config->model(),
-            'messages' => $request->messages,
-            'temperature' => 0.1,
-            'response_format' => ['type' => 'json_object'],
-        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        if ($payload === false || strlen($payload) > 100000) {
-            throw new provider_exception('error:invalidresponse');
-        }
+        $payload = (new chat_payload_builder())->build($this->config->model(), $request->messages);
 
         $options = [
             'CURLOPT_CONNECTTIMEOUT' => 5,
@@ -78,14 +70,46 @@ final class openai_compatible_provider implements chat_provider_interface {
                 $decoded = json_decode($raw, true, 32);
                 $content = $decoded['choices'][0]['message']['content'] ?? null;
                 if (!is_string($content) || strlen($content) > 50000) {
-                    throw new provider_exception('error:invalidresponse');
+                    throw new provider_exception('error:invalidresponse', 'invalid_response');
                 }
                 return new chat_response($content);
             }
             if (!$transient || $attempt === 1) {
-                throw new provider_exception();
+                throw new provider_exception('error:provider', $this->diagnostic($errno, $status));
             }
         }
         throw new provider_exception();
+    }
+
+    /**
+     * Convert transport status into a safe category without response content.
+     *
+     * @param int $errno Curl error number.
+     * @param int $status HTTP status code.
+     * @return string
+     */
+    private function diagnostic(int $errno, int $status): string {
+        if ($errno !== 0 || $status === 0) {
+            return 'network';
+        }
+        if ($status === 400) {
+            return 'request_rejected';
+        }
+        if ($status === 401) {
+            return 'authentication';
+        }
+        if ($status === 403) {
+            return 'permission';
+        }
+        if ($status === 404) {
+            return 'model_or_endpoint';
+        }
+        if ($status === 429) {
+            return 'rate_limit_or_quota';
+        }
+        if ($status >= 500 && $status <= 599) {
+            return 'provider_5xx';
+        }
+        return 'provider_error';
     }
 }
