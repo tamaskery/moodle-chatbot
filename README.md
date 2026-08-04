@@ -125,6 +125,7 @@ Report suspected vulnerabilities privately as described in [SECURITY.md](SECURIT
 - Issues: <https://github.com/tamaskery/moodle-chatbot/issues>
 - Maintainer: Tamas Kery, <tom@tomkery.eu>
 - Contribution guide: [CONTRIBUTING.md](CONTRIBUTING.md)
+- Version history: [CHANGES.md](CHANGES.md)
 - Test instructions: [docs/TESTING.md](docs/TESTING.md)
 - Adversarial provider protocol: [docs/ADVERSARIAL_TESTING.md](docs/ADVERSARIAL_TESTING.md)
 

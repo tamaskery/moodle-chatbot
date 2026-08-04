@@ -1,5 +1,22 @@
 # Change log
 
+## Versioning policy
+
+- A Git push is a development change, not automatically a published release.
+- Moodle's numeric `$plugin->version` is an upgrade/build identifier. It is increased when Moodle must detect new deployable code or a database change.
+- `$plugin->release` is the human-readable release name. It changes only when a tested ZIP is published and tagged in Git.
+- Security fixes made after `0.2.0-beta1` are collected below for the planned `0.2.0-beta2` release.
+
+## Unreleased - planned 0.2.0-beta2
+
+- Add dedicated permission-boundary tests for hidden, group-restricted, date-restricted, stale and cross-course retrieval candidates.
+- Add citation-mapping and orchestration regression coverage so inaccessible sources cannot reach provider prompts or displayed citations.
+- Empirically test adversarial Page content against the configured model and document a repeatable live-provider protocol.
+- Filter common prompt-injection patterns before course guidance or retrieved chunks are sent to the provider.
+- Route deadline-extension, rescheduling and submission-window questions to authoritative Moodle activity dates.
+- Add an atomic site-wide daily provider-call circuit breaker with automatic UTC reset, administrator notifications and a persistent settings warning.
+- Document the single-provider configuration boundary and make frontend CI validation independent of the Moodle source layout.
+
 ## 0.2.0-beta1 — 2026-08-04
 
 - Identify Tamas Kery as the plugin owner and maintainer.
