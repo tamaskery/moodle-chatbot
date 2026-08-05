@@ -34,6 +34,10 @@ import Notification from 'core/notification';
  * @param {Object} result
  */
 const renderResult = (root, result) => {
+    const diagnosticReceipt = root.querySelector('[data-region="diagnostic-receipt"]');
+    diagnosticReceipt.textContent = result.diagnosticmessage || '';
+    diagnosticReceipt.hidden = !result.diagnosticcaptured;
+
     const factsSection = root.querySelector('[data-region="facts"]');
     const factsList = root.querySelector('[data-region="fact-list"]');
     factsList.replaceChildren();
@@ -117,6 +121,7 @@ const openChat = async(courseId) => {
             status.textContent = strings[1];
             try {
                 const save = root.querySelector('[data-region="save-history"]');
+                const diagnosticConsent = root.querySelector('[data-region="diagnostic-consent"]');
                 const result = await Ajax.call([{
                     methodname: 'block_courseaiguide_ask',
                     args: {
@@ -124,12 +129,16 @@ const openChat = async(courseId) => {
                         question: question.value,
                         savehistory: save ? save.checked : false,
                         conversationid: conversationId,
+                        diagnosticconsent: diagnosticConsent ? diagnosticConsent.checked : false,
                     },
                 }])[0];
                 if (!cancelled) {
                     conversationId = result.conversationid || '';
                     status.textContent = '';
                     renderResult(root, result);
+                    if (diagnosticConsent) {
+                        diagnosticConsent.checked = false;
+                    }
                     question.focus();
                 }
             } catch (error) {

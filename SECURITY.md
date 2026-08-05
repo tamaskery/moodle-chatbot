@@ -31,6 +31,8 @@ The plugin treats participant input, indexed course text and provider output as 
 - no quiz questions, answers, attempts, feedback, submissions or grades in the index;
 - no bearer-key forwarding through redirects;
 - no raw provider content or credentials in logs;
+- no standing diagnostic log: incident capture requires site enablement, a one-hour manager window and per-turn participant consent;
+- diagnostic records exclude credentials, headers and raw provider transport responses and expire within seven days;
 - owner-scoped, expiring conversation history;
 - session-key and capability checks on state-changing requests.
 

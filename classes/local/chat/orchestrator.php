@@ -24,6 +24,7 @@
 namespace block_courseaiguide\local\chat;
 
 use block_courseaiguide\local\access\course_guard;
+use block_courseaiguide\local\diagnostic\diagnostic_service;
 use block_courseaiguide\local\history\history_service;
 use block_courseaiguide\local\provider\provider_exception;
 use block_courseaiguide\local\provider\provider_factory;
@@ -45,6 +46,7 @@ final class orchestrator {
      * @param string $question
      * @param bool $savehistory
      * @param string $conversationtoken
+     * @param bool $diagnosticconsent Explicit consent to incident capture for this turn.
      * @return array
      */
     public function ask(
@@ -52,7 +54,8 @@ final class orchestrator {
         int $userid,
         string $question,
         bool $savehistory = false,
-        string $conversationtoken = ''
+        string $conversationtoken = '',
+        bool $diagnosticconsent = false
     ): array {
         $started = microtime(true);
         $requestid = bin2hex(random_bytes(8));
@@ -63,11 +66,14 @@ final class orchestrator {
         $courseconfig = (new course_guard())->require_ask($courseid, $userid);
         (new rate_limiter())->consume($courseid, $userid);
 
+        $diagnosticchunks = [];
+        $providerdiagnostic = '';
         $result = (new query_router())->answer($courseid, $userid, $question);
         if ($result === null) {
             $chunks = reference_safety::filter(
                 (new database_lexical_backend())->retrieve($courseid, $userid, $question)
             );
+            $diagnosticchunks = $chunks;
             if (!$chunks) {
                 $result = [
                     'mode' => 'notfound',
@@ -87,6 +93,7 @@ final class orchestrator {
                     $rawresponse = (new provider_factory())->create()->complete($request);
                     $result = (new answer_validator())->validate($rawresponse, $courseid, $userid, $chunks);
                 } catch (provider_exception $e) {
+                    $providerdiagnostic = $e->diagnostic();
                     $answer = get_string('error:provider', 'block_courseaiguide', $requestid);
                     $context = \context_course::instance($courseid);
                     if (has_capability('block/courseaiguide:manage', $context, $userid)) {
@@ -106,6 +113,21 @@ final class orchestrator {
             }
         }
 
+        try {
+            $diagnosticreceipt = (new diagnostic_service())->capture(
+                $courseconfig,
+                $userid,
+                $diagnosticconsent,
+                $question,
+                $result,
+                $requestid,
+                $diagnosticchunks,
+                $providerdiagnostic
+            );
+        } catch (\Throwable $e) {
+            $diagnosticreceipt = ['captured' => false, 'expiresat' => 0];
+        }
+
         $conversationtoken = clean_param($conversationtoken, PARAM_ALPHANUMEXT);
         try {
             $storedtoken = (new history_service())->store_turn(
@@ -122,6 +144,10 @@ final class orchestrator {
         }
         $result['conversationid'] = $storedtoken;
         $result['requestid'] = $requestid;
+        $result['diagnosticcaptured'] = $diagnosticreceipt['captured'];
+        $result['diagnosticmessage'] = $diagnosticreceipt['captured']
+            ? get_string('diagnosticcaptured', 'block_courseaiguide', userdate($diagnosticreceipt['expiresat']))
+            : '';
         (new usage_service())->record(
             $courseid,
             (string) $result['mode'],

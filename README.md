@@ -51,6 +51,7 @@ Open **Site administration → Plugins → Blocks → Course AI Guide** and conf
 - the provider API key;
 - the participant disclaimer;
 - optional retention and aggregate-statistics settings;
+- optional incident-diagnostic retention (disabled by default, maximum seven days);
 - per-user/course request limits;
 - the site-wide daily provider-call ceiling.
 
@@ -85,6 +86,8 @@ For a textual question, the configured external provider may receive:
 The provider is not sent the Moodle user ID, API key, grades, submissions, attempts, quiz questions or answers. Provider-side processing and retention are controlled by the provider contract, not by this plugin.
 
 Server-side conversation storage is disabled by default. A conversation is stored only when the site retention is 1–365 days, the course permits history, and the participant selects the save option. Otherwise each request is independent and the transcript remains only in the browser. The Moodle Privacy API supports metadata disclosure, export and deletion.
+
+Incident diagnostics are separate from conversation history and disabled by default. When a site administrator configures retention, a course manager may open a one-hour diagnostic window. A participant must then consent separately for each captured turn. The short-lived record contains the displayed question and answer, authoritative facts, citations, filtered reference excerpts, course guidance, model, provider hostname and an allowlisted failure category. It never contains API keys, headers or raw provider transport responses. Only users with `block/courseaiguide:manage` in that course can view or delete it; Privacy API export/deletion and automatic expiry apply.
 
 ## Security model
 

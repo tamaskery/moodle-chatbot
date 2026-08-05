@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="blocks/courseaiguide/db" VERSION="20260804" COMMENT="XMLDB file for block_courseaiguide"
+<XMLDB PATH="blocks/courseaiguide/db" VERSION="20260805" COMMENT="XMLDB file for block_courseaiguide"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
   <TABLES>
@@ -13,6 +13,7 @@
         <FIELD NAME="sourceareas" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="instructions" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="historyenabled" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="diagnosticuntil" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="indexstatus" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="disabled" SEQUENCE="false"/>
         <FIELD NAME="indexgeneration" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="confighash" TYPE="char" LENGTH="64" NOTNULL="false" SEQUENCE="false"/>
@@ -186,6 +187,38 @@
       </KEYS>
       <INDEXES>
         <INDEX NAME="dayuniq" UNIQUE="true" FIELDS="daystart"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_courseaiguide_diag" COMMENT="Short-lived participant-consented incident diagnostic captures">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="requestid" TYPE="char" LENGTH="32" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="mode" TYPE="char" LENGTH="20" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="question" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="answer" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="factsjson" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="sourcesjson" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="referencejson" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="guidance" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="model" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="providerhost" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="diagnostic" TYPE="char" LENGTH="40" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="pluginversion" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="consentat" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="expiresat" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="coursefk" TYPE="foreign" FIELDS="courseid" REFTABLE="course" REFFIELDS="id"/>
+        <KEY NAME="userfk" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="requestuniq" UNIQUE="true" FIELDS="requestid"/>
+        <INDEX NAME="courseexpiryidx" UNIQUE="false" FIELDS="courseid,expiresat"/>
+        <INDEX NAME="owneridx" UNIQUE="false" FIELDS="courseid,userid,timecreated"/>
       </INDEXES>
     </TABLE>
   </TABLES>

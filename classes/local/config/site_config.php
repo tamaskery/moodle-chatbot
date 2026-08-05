@@ -74,6 +74,16 @@ final class site_config {
     }
 
     /**
+     * Return the administrator-approved diagnostic retention window.
+     *
+     * @return int Retention in hours, or zero when incident capture is disabled.
+     */
+    public function diagnostic_retention_hours(): int {
+        $hours = (int) get_config('block_courseaiguide', 'diagnosticretentionhours');
+        return $hours <= 0 ? 0 : min(168, max(1, $hours));
+    }
+
+    /**
      * Return whether aggregate statistics are enabled.
      *
      * @return bool Whether aggregate statistics are enabled.

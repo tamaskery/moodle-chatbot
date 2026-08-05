@@ -90,6 +90,28 @@ final class purge_retained_data extends \core\task\scheduled_task {
             $DB->delete_records_select('block_courseaiguide_conv', "id $insql", $params);
         }
         $DB->delete_records_select('block_courseaiguide_rate', 'windowend <= :now', ['now' => $now]);
+        $diagnostichours = (new site_config())->diagnostic_retention_hours();
+        if ($diagnostichours === 0) {
+            $DB->delete_records('block_courseaiguide_diag');
+            $DB->set_field_select('block_courseaiguide_course', 'diagnosticuntil', null, 'diagnosticuntil IS NOT NULL');
+        } else {
+            $maximumdiagnosticexpiry = $now + ($diagnostichours * HOURSECS);
+            $DB->set_field_select(
+                'block_courseaiguide_diag',
+                'expiresat',
+                $maximumdiagnosticexpiry,
+                'expiresat > :maximumexpiry',
+                ['maximumexpiry' => $maximumdiagnosticexpiry]
+            );
+            $DB->delete_records_select('block_courseaiguide_diag', 'expiresat <= :now', ['now' => $now]);
+            $DB->set_field_select(
+                'block_courseaiguide_course',
+                'diagnosticuntil',
+                null,
+                'diagnosticuntil <= :now',
+                ['now' => $now]
+            );
+        }
         $DB->delete_records_select(
             'block_courseaiguide_site',
             'daystart < :oldestday',

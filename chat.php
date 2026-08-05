@@ -40,17 +40,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $question = required_param('question', PARAM_TEXT);
     $savehistory = optional_param('savehistory', 0, PARAM_BOOL);
     $conversationid = optional_param('conversationid', '', PARAM_ALPHANUMEXT);
+    $diagnosticconsent = optional_param('diagnosticconsent', 0, PARAM_BOOL);
     $result = (new \block_courseaiguide\local\chat\orchestrator())->ask(
         $courseid,
         (int) $USER->id,
         $question,
         (bool) $savehistory,
-        $conversationid
+        $conversationid,
+        (bool) $diagnosticconsent
     );
 }
 
 $siteconfig = new \block_courseaiguide\local\config\site_config();
 $historyavailable = $siteconfig->retention_days() > 0 && !empty($config->historyenabled);
+$diagnosticavailable = $siteconfig->diagnostic_retention_hours() > 0
+    && \block_courseaiguide\local\config\course_config::diagnostic_active($config);
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('chatheading', 'block_courseaiguide'));
@@ -83,6 +87,26 @@ if ($historyavailable) {
     ]);
     echo html_writer::end_div();
 }
+if ($diagnosticavailable) {
+    echo html_writer::div(get_string('diagnosticconsentnotice', 'block_courseaiguide', (object) [
+        'hours' => $siteconfig->diagnostic_retention_hours(),
+        'until' => userdate((int) $config->diagnosticuntil),
+    ]), 'alert alert-warning', ['id' => 'courseaiguide-diagnostic-notice']);
+    echo html_writer::start_div('form-check mb-3');
+    echo html_writer::empty_tag('input', [
+        'type' => 'checkbox',
+        'name' => 'diagnosticconsent',
+        'value' => 1,
+        'id' => 'courseaiguide-diagnostic-consent',
+        'class' => 'form-check-input',
+        'aria-describedby' => 'courseaiguide-diagnostic-notice',
+    ]);
+    echo html_writer::tag('label', get_string('diagnosticconsent', 'block_courseaiguide'), [
+        'for' => 'courseaiguide-diagnostic-consent',
+        'class' => 'form-check-label',
+    ]);
+    echo html_writer::end_div();
+}
 echo html_writer::tag('button', get_string('ask', 'block_courseaiguide'), [
     'type' => 'submit',
     'class' => 'btn btn-primary',
@@ -90,6 +114,9 @@ echo html_writer::tag('button', get_string('ask', 'block_courseaiguide'), [
 echo html_writer::end_tag('form');
 
 if ($result) {
+    if (!empty($result['diagnosticcaptured'])) {
+        echo $OUTPUT->notification($result['diagnosticmessage'], 'success');
+    }
     if ($result['facts']) {
         echo $OUTPUT->heading(get_string('authoritativefacts', 'block_courseaiguide'), 3);
         echo html_writer::start_tag('ul');

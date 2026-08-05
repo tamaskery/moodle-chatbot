@@ -44,6 +44,12 @@ final class ask extends external_api {
             'question' => new external_value(PARAM_TEXT, 'Bounded plain-text question'),
             'savehistory' => new external_value(PARAM_BOOL, 'Explicitly save this turn', VALUE_DEFAULT, false),
             'conversationid' => new external_value(PARAM_ALPHANUMEXT, 'Owned opaque conversation token', VALUE_DEFAULT, ''),
+            'diagnosticconsent' => new external_value(
+                PARAM_BOOL,
+                'Explicit consent to short-lived incident capture for this turn',
+                VALUE_DEFAULT,
+                false
+            ),
         ]);
     }
 
@@ -54,20 +60,23 @@ final class ask extends external_api {
      * @param string $question
      * @param bool $savehistory
      * @param string $conversationid
+     * @param bool $diagnosticconsent
      * @return array
      */
     public static function execute(
         int $courseid,
         string $question,
         bool $savehistory = false,
-        string $conversationid = ''
+        string $conversationid = '',
+        bool $diagnosticconsent = false
     ): array {
         global $USER;
         $params = self::validate_parameters(self::execute_parameters(), compact(
             'courseid',
             'question',
             'savehistory',
-            'conversationid'
+            'conversationid',
+            'diagnosticconsent'
         ));
         require_sesskey();
         $course = get_course($params['courseid']);
@@ -78,7 +87,8 @@ final class ask extends external_api {
             (int) $USER->id,
             $params['question'],
             $params['savehistory'],
-            $params['conversationid']
+            $params['conversationid'],
+            $params['diagnosticconsent']
         );
     }
 
@@ -105,6 +115,8 @@ final class ask extends external_api {
             ])),
             'conversationid' => new external_value(PARAM_ALPHANUMEXT, 'Owned opaque token or empty'),
             'requestid' => new external_value(PARAM_ALPHANUMEXT, 'Non-sensitive request id'),
+            'diagnosticcaptured' => new external_value(PARAM_BOOL, 'Whether this turn was captured with consent'),
+            'diagnosticmessage' => new external_value(PARAM_TEXT, 'Participant-visible capture receipt or empty'),
         ]);
     }
 }

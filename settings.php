@@ -79,6 +79,13 @@ if ($ADMIN->fulltree) {
         0,
         PARAM_INT
     ));
+    $settings->add(new admin_setting_configtext(
+        'block_courseaiguide/diagnosticretentionhours',
+        get_string('settings:diagnosticretentionhours', 'block_courseaiguide'),
+        get_string('settings:diagnosticretentionhours_desc', 'block_courseaiguide'),
+        0,
+        PARAM_INT
+    ));
     $settings->add(new admin_setting_configcheckbox(
         'block_courseaiguide/statisticsenabled',
         get_string('settings:statisticsenabled', 'block_courseaiguide'),

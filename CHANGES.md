@@ -15,6 +15,7 @@
 - Filter common prompt-injection patterns before course guidance or retrieved chunks are sent to the provider.
 - Route deadline-extension, rescheduling and submission-window questions to authoritative Moodle activity dates.
 - Add an atomic site-wide daily provider-call circuit breaker with automatic UTC reset, administrator notifications and a persistent settings warning.
+- Add short-lived, manager-armed and participant-consented incident diagnostics separate from conversation history.
 - Document the single-provider configuration boundary and make frontend CI validation independent of the Moodle source layout.
 
 ## 0.2.0-beta1 — 2026-08-04

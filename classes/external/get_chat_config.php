@@ -24,6 +24,7 @@
 namespace block_courseaiguide\external;
 
 use block_courseaiguide\local\access\course_guard;
+use block_courseaiguide\local\config\course_config;
 use block_courseaiguide\local\config\site_config;
 use core_external\external_api;
 use core_external\external_function_parameters;
@@ -59,9 +60,20 @@ final class get_chat_config extends external_api {
         self::validate_context(\context_course::instance($course->id));
         $courseconfig = (new course_guard())->require_ask((int) $course->id, (int) $USER->id);
         $siteconfig = new site_config();
+        $diagnosticavailable = $siteconfig->diagnostic_retention_hours() > 0
+            && course_config::diagnostic_active($courseconfig);
         return [
             'disclaimer' => clean_param($siteconfig->disclaimer(), PARAM_TEXT),
             'historyavailable' => $siteconfig->retention_days() > 0 && !empty($courseconfig->historyenabled),
+            'diagnosticavailable' => $diagnosticavailable,
+            'diagnosticnotice' => $diagnosticavailable ? get_string(
+                'diagnosticconsentnotice',
+                'block_courseaiguide',
+                (object) [
+                    'hours' => $siteconfig->diagnostic_retention_hours(),
+                    'until' => userdate((int) $courseconfig->diagnosticuntil),
+                ]
+            ) : '',
         ];
     }
 
@@ -74,6 +86,8 @@ final class get_chat_config extends external_api {
         return new external_single_structure([
             'disclaimer' => new external_value(PARAM_TEXT, 'Approved disclaimer'),
             'historyavailable' => new external_value(PARAM_BOOL, 'Whether participant opt-in may be offered'),
+            'diagnosticavailable' => new external_value(PARAM_BOOL, 'Whether manager-armed diagnostic consent is offered'),
+            'diagnosticnotice' => new external_value(PARAM_TEXT, 'Plain-text participant diagnostic notice or empty'),
         ]);
     }
 }

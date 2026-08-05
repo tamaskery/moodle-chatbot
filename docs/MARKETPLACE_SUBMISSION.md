@@ -16,6 +16,8 @@ The plugin excludes quiz questions and answers, attempts, feedback, submissions,
 
 An administrator must supply an HTTPS OpenAI-compatible Chat Completions endpoint, model and API key. This release supports one site-wide provider configuration; it does not support multiple saved providers, per-course provider selection or automatic provider fallback. Switching providers requires the administrator to replace the configured endpoint, model and API key. Provider use may incur separate charges. The administrator is responsible for the provider contract, privacy terms, data residency, participant notice and acceptable-use policy.
 
+Optional incident diagnostics are disabled by default and separate from conversation history. Site enablement, a one-hour course-manager window and explicit consent for each participant turn are all required. Records expire after at most seven days, are visible only to users with course guide management permission, and exclude API keys, headers and raw provider transport responses.
+
 Conversation history and aggregate statistics are disabled by default. History requires administrator retention, course-manager permission and participant opt-in. The plugin implements Moodle's Privacy API, backup/restore, scheduled retention purging and aggregate-only reporting.
 
 ## Listing metadata

@@ -102,6 +102,9 @@ class block_courseaiguide extends block_base {
                 'courseid' => $courseid,
             ]))->out(false),
             'reporturl' => (new moodle_url('/blocks/courseaiguide/report.php', ['courseid' => $courseid]))->out(false),
+            'diagnosticsurl' => (new moodle_url('/blocks/courseaiguide/diagnostics.php', [
+                'courseid' => $courseid,
+            ]))->out(false),
             'historyavailable' => $historyavailable,
             'historyurl' => (new moodle_url('/blocks/courseaiguide/history.php', ['courseid' => $courseid]))->out(false),
         ]);

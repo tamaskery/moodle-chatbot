@@ -73,6 +73,25 @@ final class provider implements
             'requestcount' => 'privacy:metadata:requestcount',
             'timemodified' => 'privacy:metadata:timemodified',
         ], 'privacy:metadata:rate');
+        $collection->add_database_table('block_courseaiguide_diag', [
+            'courseid' => 'privacy:metadata:courseid',
+            'userid' => 'privacy:metadata:userid',
+            'requestid' => 'privacy:metadata:requestid',
+            'mode' => 'privacy:metadata:diagnosticcontext',
+            'question' => 'privacy:metadata:content',
+            'answer' => 'privacy:metadata:diagnosticanswer',
+            'factsjson' => 'privacy:metadata:diagnosticcontext',
+            'sourcesjson' => 'privacy:metadata:diagnosticcontext',
+            'referencejson' => 'privacy:metadata:diagnosticcontext',
+            'guidance' => 'privacy:metadata:diagnosticcontext',
+            'model' => 'privacy:metadata:diagnosticmodel',
+            'providerhost' => 'privacy:metadata:diagnosticmodel',
+            'diagnostic' => 'privacy:metadata:diagnosticcontext',
+            'pluginversion' => 'privacy:metadata:diagnosticmodel',
+            'consentat' => 'privacy:metadata:timeoptedin',
+            'expiresat' => 'privacy:metadata:expiresat',
+            'timecreated' => 'privacy:metadata:timecreated',
+        ], 'privacy:metadata:diagnostic');
         $collection->add_external_location_link('configured_ai_provider', [
             'question' => 'privacy:metadata:content',
             'coursefacts' => 'privacy:metadata:provider',
@@ -91,7 +110,14 @@ final class provider implements
     public static function get_contexts_for_userid(int $userid): contextlist {
         $contextlist = new contextlist();
         $params = ['contextlevel' => CONTEXT_COURSE, 'userid' => $userid];
-        foreach (['block_courseaiguide_conv', 'block_courseaiguide_msg', 'block_courseaiguide_rate'] as $table) {
+        foreach (
+            [
+                'block_courseaiguide_conv',
+                'block_courseaiguide_msg',
+                'block_courseaiguide_rate',
+                'block_courseaiguide_diag',
+            ] as $table
+        ) {
             $sql = "SELECT ctx.id
                       FROM {context} ctx
                       JOIN {{$table}} d ON d.courseid = ctx.instanceid
@@ -142,6 +168,19 @@ final class provider implements
                     get_string('privacy:path', 'block_courseaiguide'),
                 ], 'rate_limits', (object) ['windows' => $rates]);
             }
+            $diagnostics = $DB->get_records('block_courseaiguide_diag', [
+                'courseid' => $courseid,
+                'userid' => $userid,
+            ], 'timecreated ASC');
+            foreach ($diagnostics as $diagnostic) {
+                $diagnostic->consentat = transform::datetime($diagnostic->consentat);
+                $diagnostic->expiresat = transform::datetime($diagnostic->expiresat);
+                $diagnostic->timecreated = transform::datetime($diagnostic->timecreated);
+                content_writer::with_context($context)->export_related_data([
+                    get_string('privacy:path', 'block_courseaiguide'),
+                    get_string('diagnosticcaptures', 'block_courseaiguide'),
+                ], $diagnostic->requestid, $diagnostic);
+            }
         }
     }
 
@@ -184,11 +223,13 @@ final class provider implements
         $params = ['courseid' => $context->instanceid];
         $sql = 'SELECT userid FROM {block_courseaiguide_conv} WHERE courseid = :courseid1
                 UNION SELECT userid FROM {block_courseaiguide_msg} WHERE courseid = :courseid2
-                UNION SELECT userid FROM {block_courseaiguide_rate} WHERE courseid = :courseid3';
+                UNION SELECT userid FROM {block_courseaiguide_rate} WHERE courseid = :courseid3
+                UNION SELECT userid FROM {block_courseaiguide_diag} WHERE courseid = :courseid4';
         $userlist->add_from_sql('userid', $sql, [
             'courseid1' => $params['courseid'],
             'courseid2' => $params['courseid'],
             'courseid3' => $params['courseid'],
+            'courseid4' => $params['courseid'],
         ]);
     }
 
@@ -222,5 +263,6 @@ final class provider implements
         $DB->delete_records('block_courseaiguide_msg', $conditions);
         $DB->delete_records('block_courseaiguide_conv', $conditions);
         $DB->delete_records('block_courseaiguide_rate', $conditions);
+        $DB->delete_records('block_courseaiguide_diag', $conditions);
     }
 }

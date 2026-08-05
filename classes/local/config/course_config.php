@@ -81,6 +81,7 @@ final class course_config {
                 'sourceareas' => '[]',
                 'instructions' => '',
                 'historyenabled' => 0,
+                'diagnosticuntil' => null,
                 'indexstatus' => 'disabled',
                 'indexgeneration' => 0,
                 'confighash' => '',
@@ -127,5 +128,28 @@ final class course_config {
             return [];
         }
         return array_values(array_intersect(array_keys(source_registry::all_types()), $decoded));
+    }
+
+    /**
+     * Whether a manager-armed diagnostic window is currently active.
+     *
+     * @param \stdClass $record Course configuration.
+     * @param int|null $now Optional timestamp for tests.
+     * @return bool
+     */
+    public static function diagnostic_active(\stdClass $record, ?int $now = null): bool {
+        $now = $now ?? time();
+        return !empty($record->diagnosticuntil) && (int) $record->diagnosticuntil > $now;
+    }
+
+    /**
+     * Arm or disarm the short course diagnostic window without changing index state.
+     *
+     * @param int $courseid Course ID.
+     * @param int|null $until Expiry timestamp, or null to disarm.
+     */
+    public static function set_diagnostic_until(int $courseid, ?int $until): void {
+        global $DB;
+        $DB->set_field('block_courseaiguide_course', 'diagnosticuntil', $until, ['courseid' => $courseid]);
     }
 }

@@ -11,6 +11,7 @@
     * chaturl Non-JavaScript fallback URL.
     * reindexurl Manager re-index confirmation URL.
     * reporturl Aggregate report URL.
+    * diagnosticsurl Manager-only incident diagnostics URL.
     * historyavailable Whether participant-owned history is enabled.
     * historyurl Participant-owned history URL.
 
@@ -23,6 +24,7 @@
         "chaturl": "https://moodle.example/blocks/courseaiguide/chat.php?courseid=42",
         "reindexurl": "https://moodle.example/blocks/courseaiguide/reindex.php?courseid=42",
         "reporturl": "https://moodle.example/blocks/courseaiguide/report.php?courseid=42",
+        "diagnosticsurl": "https://moodle.example/blocks/courseaiguide/diagnostics.php?courseid=42",
         "historyavailable": true,
         "historyurl": "https://moodle.example/blocks/courseaiguide/history.php?courseid=42"
     }
@@ -47,6 +49,7 @@
         <div class="mt-2">
             <a href="{{reindexurl}}">{{#str}}reindex, block_courseaiguide{{/str}}</a>
             &middot; <a href="{{reporturl}}">{{#str}}viewreport, block_courseaiguide{{/str}}</a>
+            &middot; <a href="{{diagnosticsurl}}">{{#str}}viewdiagnostics, block_courseaiguide{{/str}}</a>
         </div>
     {{/canmanage}}
 </div>

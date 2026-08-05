@@ -49,6 +49,7 @@ final class lifecycle {
      */
     public static function purge_course(int $courseid): void {
         global $DB;
+        $DB->delete_records('block_courseaiguide_diag', ['courseid' => $courseid]);
         $DB->delete_records('block_courseaiguide_msg', ['courseid' => $courseid]);
         $DB->delete_records('block_courseaiguide_conv', ['courseid' => $courseid]);
         $DB->delete_records('block_courseaiguide_usage', ['courseid' => $courseid]);

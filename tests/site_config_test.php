@@ -88,4 +88,15 @@ final class site_config_test extends \advanced_testcase {
         set_config('siteprovidercalllimit', 2000000, 'block_courseaiguide');
         $this->assertSame(1000000, (new site_config())->site_daily_provider_limit());
     }
+
+    /**
+     * Incident capture is disabled by default and cannot retain longer than seven days.
+     */
+    public function test_diagnostic_retention_is_disabled_and_bounded(): void {
+        $this->resetAfterTest();
+        unset_config('diagnosticretentionhours', 'block_courseaiguide');
+        $this->assertSame(0, (new site_config())->diagnostic_retention_hours());
+        set_config('diagnosticretentionhours', 999, 'block_courseaiguide');
+        $this->assertSame(168, (new site_config())->diagnostic_retention_hours());
+    }
 }
