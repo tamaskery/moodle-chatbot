@@ -52,7 +52,7 @@ final class site_circuit_breaker_test extends \advanced_testcase {
         $this->assertNotEmpty($messages);
         $firstmessage = reset($messages);
         $this->assertSame('block_courseaiguide', $firstmessage->component);
-        $this->assertSame('sitecircuitbreaker', $firstmessage->name);
+        $this->assertSame('sitecircuitbreaker', $firstmessage->eventtype);
 
         try {
             $breaker->reserve();

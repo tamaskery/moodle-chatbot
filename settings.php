@@ -24,7 +24,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
-    try {
+    $dbmanager = $DB->get_manager();
+    if ($dbmanager->table_exists('block_courseaiguide_site')) {
         $breakerstatus = (new \block_courseaiguide\local\rate\site_circuit_breaker())->status();
         if ($breakerstatus['open']) {
             $settings->add(new admin_setting_heading(
@@ -37,8 +38,6 @@ if ($ADMIN->fulltree) {
                 ])
             ));
         }
-    } catch (\Throwable $e) {
-        // The table may not exist yet while Moodle is performing an upgrade.
     }
     $settings->add(new admin_setting_heading(
         'block_courseaiguide/providersettings',

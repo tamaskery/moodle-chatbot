@@ -21,6 +21,7 @@
  * @copyright  2026 Tamas Kery <tom@tomkery.eu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 require_once(__DIR__ . '/../../config.php');
 
 $courseid = required_param('courseid', PARAM_INT);
@@ -116,14 +117,15 @@ if (!$records) {
         ]);
         echo html_writer::start_tag('details', ['class' => 'card card-body mb-3']);
         echo html_writer::tag('summary', s($summary), ['class' => 'font-weight-bold']);
-        foreach ([
+        $diagnosticfields = [
             'diagnosticquestion' => $record->question,
             'diagnosticanswer' => $record->answer,
             'diagnosticfacts' => $record->factsjson,
             'diagnosticsources' => $record->sourcesjson,
             'diagnosticreferences' => $record->referencejson,
             'diagnosticguidance' => $record->guidance,
-        ] as $label => $value) {
+        ];
+        foreach ($diagnosticfields as $label => $value) {
             echo $OUTPUT->heading(get_string($label, 'block_courseaiguide'), 5);
             echo html_writer::tag('pre', s((string) $value), ['class' => 'text-wrap']);
         }
