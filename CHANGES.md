@@ -5,9 +5,9 @@
 - A Git push is a development change, not automatically a published release.
 - Moodle's numeric `$plugin->version` is an upgrade/build identifier. It is increased when Moodle must detect new deployable code or a database change.
 - `$plugin->release` is the human-readable release name. It changes only when a tested ZIP is published and tagged in Git.
-- Security fixes made after `0.2.0-beta1` are collected below for the planned `0.2.0-beta2` release.
+- Security fixes made after a published release are collected under an Unreleased heading until the next tested release is prepared.
 
-## Unreleased - planned 0.2.0-beta2
+## 0.2.0-beta2 — 2026-08-05
 
 - Adopt Course AI Assistant as the public-facing name while retaining the Marketplace component `block_courseaiguide` for upgrade compatibility.
 - Add dedicated permission-boundary tests for hidden, group-restricted, date-restricted, stale and cross-course retrieval candidates.
@@ -20,6 +20,7 @@
 - Document the single-provider configuration boundary and make frontend CI validation independent of the Moodle source layout.
 - Add a random 200-500 ms backoff before the single retry after transient network, HTTP 429 or HTTP 5xx failures.
 - Add an administrator-only saved-provider connection test using a fixed synthetic request and sanitized results.
+- Restore a fully green Moodle 4.5–5.2 CI matrix after the security and provider changes.
 
 ## 0.2.0-beta1 — 2026-08-04
 

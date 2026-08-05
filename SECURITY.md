@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Security fixes are provided for the latest published Course AI Assistant release. The current `0.2.0-beta1` release is a review candidate and should be used only in controlled deployments until its release gates pass.
+Security fixes are provided for the latest published Course AI Assistant release. The current `0.2.0-beta2` release is a review candidate and should be used only in controlled deployments until its release gates pass.
 
 ## Reporting a vulnerability
 
