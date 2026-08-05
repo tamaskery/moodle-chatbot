@@ -18,6 +18,8 @@
 - Add an atomic site-wide daily provider-call circuit breaker with automatic UTC reset, administrator notifications and a persistent settings warning.
 - Add short-lived, manager-armed and participant-consented incident diagnostics separate from conversation history.
 - Document the single-provider configuration boundary and make frontend CI validation independent of the Moodle source layout.
+- Add a random 200-500 ms backoff before the single retry after transient network, HTTP 429 or HTTP 5xx failures.
+- Add an administrator-only saved-provider connection test using a fixed synthetic request and sanitized results.
 
 ## 0.2.0-beta1 — 2026-08-04
 

@@ -94,6 +94,8 @@ final class openai_compatible_provider implements chat_provider_interface {
             if (!$transient || $attempt === 1) {
                 throw new provider_exception('error:provider', $this->diagnostic($errno, $status));
             }
+            // Avoid compounding provider throttling or a brief outage with an immediate retry.
+            (new retry_backoff())->wait();
         }
         throw new provider_exception();
     }

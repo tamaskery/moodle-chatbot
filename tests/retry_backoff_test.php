@@ -21,12 +21,25 @@
  * @copyright  2026 Tamas Kery <tom@tomkery.eu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+namespace block_courseaiguide;
 
-defined('MOODLE_INTERNAL') || die();
+use block_courseaiguide\local\provider\retry_backoff;
 
-$plugin->component = 'block_courseaiguide';
-$plugin->version = 2026080502;
-$plugin->requires = 2024100700;
-$plugin->supported = [405, 502];
-$plugin->maturity = MATURITY_BETA;
-$plugin->release = '0.2.0-beta1';
+/**
+ * Retry backoff tests.
+ *
+ * @covers \block_courseaiguide\local\provider\retry_backoff
+ */
+final class retry_backoff_test extends \advanced_testcase {
+    /**
+     * Jitter always remains within the documented short delay.
+     */
+    public function test_delay_is_bounded(): void {
+        $backoff = new retry_backoff();
+        for ($sample = 0; $sample < 100; $sample++) {
+            $delay = $backoff->delay_milliseconds();
+            $this->assertGreaterThanOrEqual(retry_backoff::MIN_MILLISECONDS, $delay);
+            $this->assertLessThanOrEqual(retry_backoff::MAX_MILLISECONDS, $delay);
+        }
+    }
+}

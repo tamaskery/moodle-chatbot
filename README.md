@@ -61,6 +61,8 @@ This release supports one site-wide OpenAI-compatible provider configuration. Mu
 
 The endpoint, model and key are unset by default. Retention is zero, statistics are disabled, and no course is participant-accessible by default.
 
+After saving the endpoint, model and API key, select **Test saved connection** on the same settings page. The test requires site-administration permission and a valid session key. It sends one fixed synthetic request without Moodle course or participant data, stores no prompt or response, and counts as one logical call against the site-wide daily ceiling.
+
 The administrator is responsible for approving the AI provider, model, contract, data-processing terms, data residency, disclaimer and acceptable-use policy. Test model compatibility before enabling participant access.
 
 ## Course configuration
@@ -95,7 +97,7 @@ Incident diagnostics are separate from conversation history and disabled by defa
 
 Every request validates parameters, session key, course context, capabilities, active enrolment or management access, course readiness and rate limits. Retrieval is course-scoped. Every candidate is rechecked through its Moodle Search area's `check_access()` and current-user course-module visibility and availability before it can enter the provider prompt or citation list. Reference text matching common prompt-injection patterns is conservatively removed before a provider call. Questions about deadlines, extensions, rescheduling and submission windows are answered from Moodle's user-specific activity dates instead of retrieved prose.
 
-Provider redirects are disabled, response sizes are bounded, endpoint URLs are validated, model-generated URLs are discarded, and rendered model text is inserted as text rather than HTML. Raw prompts, responses, headers and keys are not logged.
+Provider redirects are disabled, response sizes are bounded, endpoint URLs are validated, model-generated URLs are discarded, and rendered model text is inserted as text rather than HTML. A transient network, HTTP 429 or HTTP 5xx failure receives one retry after a random 200-500 ms delay. Raw prompts, responses, headers and keys are not logged.
 
 A database-backed site circuit breaker permits at most the administrator-configured number of logical external provider calls per UTC day across all courses and users (default: 1,000). The reservation is atomic, failed provider attempts count, and Moodle-only or not-found answers do not. At the ceiling, external calls pause until the next UTC day or until an administrator raises the limit. Site administrators receive one Moodle notification and the plugin settings show a persistent warning. This is a request ceiling, not a currency estimate; administrators must choose it from their provider pricing and institutional budget.
 

@@ -34,6 +34,7 @@ The plugin treats participant input, indexed course text and provider output as 
 - no standing diagnostic log: incident capture requires site enablement, a one-hour manager window and per-turn participant consent;
 - diagnostic records exclude credentials, headers and raw provider transport responses and expire within seven days;
 - owner-scoped, expiring conversation history;
-- session-key and capability checks on state-changing requests.
+- session-key and capability checks on state-changing requests;
+- administrator connection tests use saved settings, a fixed synthetic request, site-configuration capability, session-key protection and sanitized results only.
 
 Changes that weaken these invariants must not be merged.

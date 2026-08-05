@@ -47,6 +47,7 @@ final class provider_exception extends \moodle_exception {
             'provider_error',
             'rate_limit_or_quota',
             'request_rejected',
+            'site_rate_control',
         ];
         $this->diagnostic = in_array($diagnostic, $allowed, true) ? $diagnostic : 'provider_error';
         parent::__construct($errorcode, 'block_courseaiguide');

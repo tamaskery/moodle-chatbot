@@ -65,6 +65,15 @@ if ($ADMIN->fulltree) {
         get_string('settings:apikey_desc', 'block_courseaiguide'),
         ''
     ));
+    $settings->add(new admin_setting_description(
+        'block_courseaiguide/testconnection',
+        get_string('settings:testconnection', 'block_courseaiguide'),
+        html_writer::link(
+            new moodle_url('/blocks/courseaiguide/test_connection.php'),
+            get_string('settings:testconnectionbutton', 'block_courseaiguide'),
+            ['class' => 'btn btn-secondary mb-2']
+        ) . html_writer::tag('p', get_string('settings:testconnection_desc', 'block_courseaiguide'))
+    ));
     $settings->add(new admin_setting_configtextarea(
         'block_courseaiguide/disclaimer',
         get_string('settings:disclaimer', 'block_courseaiguide'),

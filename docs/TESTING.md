@@ -54,12 +54,13 @@ Use full developer debugging and synthetic data.
 5. Test hidden activities, hidden sections, date restrictions, groups and grouping restrictions.
 6. Verify that quiz questions, answers, attempts, submissions, grades and teacher-only files are never returned.
 7. Test assignment, quiz and SCORM dates plus activity and course completion.
-8. Test provider success, timeout, malformed JSON, redirect, HTTP 401, 429 and 5xx responses.
-9. Set the site-wide provider ceiling to a small value, reach it from different users and courses, and confirm exactly the configured number of external calls is permitted, administrators are notified once, further calls pause, and a new UTC day resets the circuit.
-10. Confirm diagnostics store nothing by default, require site enablement plus manager arming plus fresh per-turn participant consent, are course-manager scoped, omit credentials/raw transport data, expire at the configured maximum, and support immediate manager deletion and Privacy API export/deletion.
-11. Test no-store history, opt-in history, expiry, participant deletion and Privacy API export/deletion.
-12. Test course backup/restore, block deletion, course deletion, upgrade and uninstall. Confirm diagnostic arming and captures are never included in course backup.
-13. Test keyboard-only operation, screen-reader labels, focus, zoom and supported core themes.
+8. Save the provider settings and use **Test saved connection**. Confirm only an administrator can run it, GET does not call the provider, POST requires a valid session key, one synthetic call is counted by the site circuit breaker, and the result never displays the API key, endpoint path, prompt or raw response.
+9. Test provider success, timeout, malformed JSON, redirect, HTTP 401, 429 and 5xx responses. Confirm transient failures wait 200-500 ms before the single retry and permanent failures are not retried.
+10. Set the site-wide provider ceiling to a small value, reach it from different users and courses, and confirm exactly the configured number of external calls is permitted, administrators are notified once, further calls pause, and a new UTC day resets the circuit.
+11. Confirm diagnostics store nothing by default, require site enablement plus manager arming plus fresh per-turn participant consent, are course-manager scoped, omit credentials/raw transport data, expire at the configured maximum, and support immediate manager deletion and Privacy API export/deletion.
+12. Test no-store history, opt-in history, expiry, participant deletion and Privacy API export/deletion.
+13. Test course backup/restore, block deletion, course deletion, upgrade and uninstall. Confirm diagnostic arming and captures are never included in course backup.
+14. Test keyboard-only operation, screen-reader labels, focus, zoom and supported core themes.
 
 Run the live provider prompt-injection protocol in [ADVERSARIAL_TESTING.md](ADVERSARIAL_TESTING.md) for every proposed provider/model combination and before each release. This is intentionally an opt-in manual test because it makes a billable external request and must never run with production course data.
 

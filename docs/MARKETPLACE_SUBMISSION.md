@@ -45,11 +45,12 @@ Recommended reviewer scenarios:
 
 1. Install with defaults and confirm participant access is unavailable.
 2. Configure the temporary provider.
-3. Add the block to a synthetic course, enable approved source types and run cron.
-4. Verify deadline and completion answers.
-5. Verify a source-grounded textual answer.
-6. Verify hidden, group-restricted and future-restricted sources are unavailable to a student.
-7. Confirm no-store and opt-in history behaviour.
+3. Run **Test saved connection** and confirm only sanitized connection details are shown.
+4. Add the block to a synthetic course, enable approved source types and run cron.
+5. Verify deadline and completion answers.
+6. Verify a source-grounded textual answer.
+7. Verify hidden, group-restricted and future-restricted sources are unavailable to a student.
+8. Confirm no-store and opt-in history behaviour.
 
 ## Submission assets
 

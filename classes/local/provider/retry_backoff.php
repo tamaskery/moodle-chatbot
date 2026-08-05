@@ -21,12 +21,31 @@
  * @copyright  2026 Tamas Kery <tom@tomkery.eu>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+namespace block_courseaiguide\local\provider;
 
-defined('MOODLE_INTERNAL') || die();
+/**
+ * Bounded jitter before the single transient-failure retry.
+ */
+final class retry_backoff {
+    /** Minimum retry delay in milliseconds. */
+    public const MIN_MILLISECONDS = 200;
 
-$plugin->component = 'block_courseaiguide';
-$plugin->version = 2026080502;
-$plugin->requires = 2024100700;
-$plugin->supported = [405, 502];
-$plugin->maturity = MATURITY_BETA;
-$plugin->release = '0.2.0-beta1';
+    /** Maximum retry delay in milliseconds. */
+    public const MAX_MILLISECONDS = 500;
+
+    /**
+     * Select a cryptographically safe bounded jitter value.
+     *
+     * @return int Delay in milliseconds.
+     */
+    public function delay_milliseconds(): int {
+        return random_int(self::MIN_MILLISECONDS, self::MAX_MILLISECONDS);
+    }
+
+    /**
+     * Pause before the final provider attempt.
+     */
+    public function wait(): void {
+        usleep($this->delay_milliseconds() * 1000);
+    }
+}
