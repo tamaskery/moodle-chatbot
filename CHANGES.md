@@ -9,6 +9,7 @@
 
 ## Unreleased - planned 0.2.0-beta2
 
+- Adopt Course AI Assistant as the public-facing name while retaining the Marketplace component `block_courseaiguide` for upgrade compatibility.
 - Add dedicated permission-boundary tests for hidden, group-restricted, date-restricted, stale and cross-course retrieval candidates.
 - Add citation-mapping and orchestration regression coverage so inaccessible sources cannot reach provider prompts or displayed citations.
 - Empirically test adversarial Page content against the configured model and document a repeatable live-provider protocol.

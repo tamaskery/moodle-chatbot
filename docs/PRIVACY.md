@@ -1,6 +1,6 @@
 # Privacy and external processing
 
-Course AI Guide integrates with an administrator-selected external AI provider. The Moodle administrator remains responsible for determining whether that processing is lawful and appropriate for the site's users and course content.
+Course AI Assistant integrates with an administrator-selected external AI provider. The Moodle administrator remains responsible for determining whether that processing is lawful and appropriate for the site's users and course content.
 
 ## Data sent to the external provider
 

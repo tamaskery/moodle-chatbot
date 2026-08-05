@@ -1,6 +1,8 @@
-# Course AI Guide
+# Course AI Assistant
 
-Course AI Guide (`block_courseaiguide`) is a course-only Moodle block that combines authoritative, user-specific Moodle facts with access-filtered retrieval over approved course content. It can answer questions about deadlines, completion and permitted course materials without indexing quiz questions, submissions, grades or teacher-only files.
+Course AI Assistant (`block_courseaiguide`) is a course-only Moodle block that combines authoritative, user-specific Moodle facts with access-filtered retrieval over approved course content. It can answer questions about deadlines, completion and permitted course materials without indexing quiz questions, submissions, grades or teacher-only files.
+
+The public plugin name is **Course AI Assistant**. Its established Moodle component remains `block_courseaiguide`, and release ZIPs must retain the `courseaiguide` directory. This stable technical identity preserves upgrades and the existing Moodle Marketplace entry.
 
 This is a beta release intended for review and controlled deployments. AI-generated explanations can be wrong; Moodle-rendered dates and completion facts are displayed separately as authoritative information.
 
@@ -44,7 +46,7 @@ Do not install this plugin on Moodle 3.x.
 
 ## Administrator configuration
 
-Open **Site administration → Plugins → Blocks → Course AI Guide** and configure:
+Open **Site administration → Plugins → Blocks → Course AI Assistant** and configure:
 
 - the complete HTTPS Chat Completions endpoint;
 - the provider model identifier;
@@ -63,7 +65,7 @@ The administrator is responsible for approving the AI provider, model, contract,
 
 ## Course configuration
 
-1. Add one **Course AI Guide** block to a course page.
+1. Add one **Course AI Assistant** block to a course page.
 2. Edit the block configuration.
 3. Select the allowed source types and optionally add bounded course guidance.
 4. Enable the course configuration and save it.
@@ -112,15 +114,15 @@ Report suspected vulnerabilities privately as described in [SECURITY.md](SECURIT
 
 ### Course-ready state
 
-![Course AI Guide block ready in a synthetic validation course](docs/screenshots/course-ready-state.png)
+![Course AI Assistant block ready in a synthetic validation course](docs/screenshots/course-ready-state.png)
 
 ### Authoritative Moodle dates
 
-![Course AI Guide showing deterministic Moodle deadline facts](docs/screenshots/authoritative-deadlines.png)
+![Course AI Assistant showing deterministic Moodle deadline facts](docs/screenshots/authoritative-deadlines.png)
 
 ### Source-grounded explanation
 
-![Course AI Guide showing an AI-generated explanation with a server-validated source](docs/screenshots/source-grounded-answer.png)
+![Course AI Assistant showing an AI-generated explanation with a server-validated source](docs/screenshots/source-grounded-answer.png)
 
 ## Support and development
 

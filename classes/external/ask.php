@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Course AI Guide plugin.
+ * Course AI Assistant plugin.
  *
  * @package    block_courseaiguide
  * @copyright  2026 Tamas Kery <tom@tomkery.eu>
@@ -30,7 +30,7 @@ use core_external\external_single_structure;
 use core_external\external_value;
 
 /**
- * Ask the course guide.
+ * Ask the course AI assistant.
  */
 final class ask extends external_api {
     /**

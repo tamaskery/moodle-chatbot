@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Course AI Guide plugin.
+ * Course AI Assistant plugin.
  *
  * @package    block_courseaiguide
  * @copyright  2026 Tamas Kery <tom@tomkery.eu>
@@ -25,7 +25,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once(__DIR__ . '/restore_courseaiguide_block_stepslib.php');
 
 /**
- * Restore task for the Course AI Guide block.
+ * Restore task for the Course AI Assistant block.
  */
 class restore_courseaiguide_block_task extends restore_block_task {
     /**

@@ -1,6 +1,6 @@
 # Adversarial provider testing
 
-Prompt injection is not solved by a system instruction alone. Course AI Guide therefore filters common injection patterns before a provider call, routes date and schedule questions to authoritative Moodle APIs, validates provider output, and requires empirical testing of every approved provider/model combination.
+Prompt injection is not solved by a system instruction alone. Course AI Assistant therefore filters common injection patterns before a provider call, routes date and schedule questions to authoritative Moodle APIs, validates provider output, and requires empirical testing of every approved provider/model combination.
 
 This procedure makes real external API calls. Use only a disposable course, synthetic text, an approved provider account, and the site's agreed data-processing and residency terms. The calls may incur a small provider charge. Never put an API key, personal data, real student work, or confidential course material in a fixture or test report.
 

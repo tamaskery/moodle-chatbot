@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Course AI Guide plugin.
+ * Course AI Assistant plugin.
  *
  * @package    block_courseaiguide
  * @copyright  2026 Tamas Kery <tom@tomkery.eu>

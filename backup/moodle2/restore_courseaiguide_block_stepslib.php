@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Course AI Guide plugin.
+ * Course AI Assistant plugin.
  *
  * @package    block_courseaiguide
  * @copyright  2026 Tamas Kery <tom@tomkery.eu>
@@ -35,7 +35,7 @@ class restore_courseaiguide_block_structure_step extends restore_structure_step 
     }
 
     /**
-     * Restore one Course AI Guide configuration record.
+     * Restore one Course AI Assistant configuration record.
      *
      * @param array|stdClass $data Restored record data.
      */

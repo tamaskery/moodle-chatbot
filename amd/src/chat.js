@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Course AI Guide modal controller.
+ * Course AI Assistant modal controller.
  *
  * @module     block_courseaiguide/chat
  * @copyright  2026 Tamas Kery <tom@tomkery.eu>

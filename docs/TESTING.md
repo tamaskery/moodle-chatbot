@@ -1,4 +1,4 @@
-# Testing Course AI Guide
+# Testing Course AI Assistant
 
 ## Automated validation
 

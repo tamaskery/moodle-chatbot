@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for helping improve Course AI Guide.
+Thank you for helping improve Course AI Assistant.
 
 ## Before opening a change
 

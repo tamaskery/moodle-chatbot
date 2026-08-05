@@ -1,5 +1,5 @@
 name: Bug report
-description: Report reproducible non-security behaviour in Course AI Guide.
+description: Report reproducible non-security behaviour in Course AI Assistant.
 title: "[Bug]: "
 labels: [bug]
 body:
@@ -9,7 +9,7 @@ body:
   - type: input
     id: pluginversion
     attributes:
-      label: Course AI Guide version
+      label: Course AI Assistant version
       placeholder: 0.2.0-beta1
     validations:
       required: true

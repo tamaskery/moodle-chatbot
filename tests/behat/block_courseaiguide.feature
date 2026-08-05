@@ -1,6 +1,6 @@
 @block @block_courseaiguide
-Feature: Add and safely configure the Course AI Guide block
-  In order to expose a course guide only after secure setup
+Feature: Add and safely configure the Course AI Assistant block
+  In order to expose a course AI assistant only after secure setup
   As an authorised course manager
   I need course-only placement and fail-closed defaults
 
@@ -20,13 +20,13 @@ Feature: Add and safely configure the Course AI Guide block
   Scenario: A manager adds one disabled course block
     Given I log in as "teacher1"
     And I am on "Course 1" course homepage with editing mode on
-    When I add the "Course AI Guide" block
-    Then I should see "Course AI Guide"
-    And I should see "Disabled" in the "Course AI Guide" "block"
-    And I should see "The course guide is not available yet." in the "Course AI Guide" "block"
+    When I add the "Course AI Assistant" block
+    Then I should see "Course AI Assistant"
+    And I should see "Disabled" in the "Course AI Assistant" "block"
+    And I should see "The course AI assistant is not available yet." in the "Course AI Assistant" "block"
 
   @javascript
   Scenario: The participant entry point stays closed before provider and index readiness
     Given I log in as "student1"
     When I am on "Course 1" course homepage
-    Then I should not see "Ask the course guide"
+    Then I should not see "Ask the course AI assistant"
